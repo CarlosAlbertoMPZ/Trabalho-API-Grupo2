@@ -1,5 +1,6 @@
 package com.apiGrupo2.g2.controllers;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,48 +13,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apiGrupo2.g2.entities.Usuario;
-import com.apiGrupo2.g2.services.UsuarioService;
-
-
-
+import com.apiGrupo2.g2.entities.Categoria;
+import com.apiGrupo2.g2.services.CategoriaService;
 
 @RestController
-@RequestMapping("/usuario")
-public class UsuarioController {
+@RequestMapping("/categoria")
+public class CategoriaController {
 
 	@Autowired
-	UsuarioService usuarioService;
+	CategoriaService categoriaService;
 	
 	@GetMapping("/contar")
 	public Integer getContar() {
-		return usuarioService.getContar();
+		return categoriaService.getContar();
 	}
 	
 	@PostMapping("/salvar")
-	public Usuario salvar (@RequestBody Usuario objetoUsuario) {
-		return usuarioService.salvar(objetoUsuario);
+	public Categoria salvar (@RequestBody Categoria objetoCategoria) {
+		return categoriaService.salvar(objetoCategoria);
 	}
+	
 	@GetMapping("/listar")
-	public List <Usuario> listar(){
-		return usuarioService.listar();
+	public List <Categoria> listar(){
+		return categoriaService.listar();
 	}
 	
 	@GetMapping("/{id}")
-	public Usuario acharId(@PathVariable Integer id) {
-		return usuarioService.acharId(id);
+	public Categoria acharId(@PathVariable Integer id) {
+		return categoriaService.acharId(id);
 	}
+	
 //	@DeleteMapping("/delete/{id}")
 //	public void apagar(@PathVariable Integer id) {
-//		usuarioService.apagar(id);
+//		categoriaService.apagar(id);
 //	}
-	@DeleteMapping("/deletarLogico/{id}")//perguntar......
-	public void deletarLogico(@PathVariable Integer id) {//alterando o apagar para deletarLogico
-		usuarioService.deletarLogico(id);
+	
+	@DeleteMapping("/deletarLogico/{id}")
+	public void deletarLogico(@PathVariable Integer id) {
+		categoriaService.deletarLogico(id);
 	}
+	
 	@PutMapping("/atualizar/{id}")
-	public Usuario atualizar(@PathVariable Integer id, @RequestBody Usuario objetoUsuario) { 
-		 return usuarioService.atualizar(id, objetoUsuario);
+	public Categoria atualizar(@PathVariable Integer id, @RequestBody Categoria objetoCategoria) { 
+		 return categoriaService.atualizar(id, objetoCategoria);
 	
 	}
 }
