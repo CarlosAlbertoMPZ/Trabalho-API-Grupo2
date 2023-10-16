@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 //import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
@@ -53,19 +55,7 @@ public class Endereco {
 	@Column(name="uf")
 	private String uf;
 	
-	@Column(name="ibge")
-	private Integer ibge;
-				
-	@Size(max=20)
-	@Column(name="guia")
-	private String guia;
-	
-	@Column(name="ddd")
-	private Integer ddd;
-	
-	@Column(name="siafi")
-	private Integer siafi;
-		
+	@JsonProperty(access=JsonProperty.Access.READ_ONLY)//mapeamento no endereço
 	//1 usuario tem 1 endereço
 	@ManyToOne
 	@JoinColumn(name="id_usuario")
@@ -79,10 +69,10 @@ public class Endereco {
 		super();
 	}
 
+		
 	public Endereco(Integer id, Boolean ativo, @NotNull @Size(max = 20) String cep, @Size(max = 100) String logradouro,
 			@Size(max = 100) String complemento, @Size(max = 50) String bairro,
-			@NotNull @Size(max = 20) String localidade, String numero, String uf, Integer ibge,
-			@Size(max = 20) String guia, Integer ddd, Integer siafi, Usuario usuario) {
+			@NotNull @Size(max = 20) String localidade, String numero, String uf, Usuario usuario) {
 		super();
 		this.id = id;
 		this.ativo = ativo;
@@ -93,14 +83,12 @@ public class Endereco {
 		this.localidade = localidade;
 		this.numero = numero;
 		this.uf = uf;
-		this.ibge = ibge;
-		this.guia = guia;
-		this.ddd = ddd;
-		this.siafi = siafi;
 		this.usuario = usuario;
 	}
 
-		
+
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -173,38 +161,7 @@ public class Endereco {
 		this.uf = uf;
 	}
 
-	public Integer getIbge() {
-		return ibge;
-	}
-
-	public void setIbge(Integer ibge) {
-		this.ibge = ibge;
-	}
-
-	public String getGuia() {
-		return guia;
-	}
-
-	public void setGuia(String guia) {
-		this.guia = guia;
-	}
-
-	public Integer getDdd() {
-		return ddd;
-	}
-
-	public void setDdd(Integer ddd) {
-		this.ddd = ddd;
-	}
-
-	public Integer getSiafi() {
-		return siafi;
-	}
-
-	public void setSiafi(Integer siafi) {
-		this.siafi = siafi;
-	}
-
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -213,17 +170,13 @@ public class Endereco {
 		this.usuario = usuario;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Endereco [id=" + id + ", ativo=" + ativo + ", cep=" + cep + ", logradouro=" + logradouro
 				+ ", complemento=" + complemento + ", bairro=" + bairro + ", localidade=" + localidade + ", numero="
-				+ numero + ", uf=" + uf + ", ibge=" + ibge + ", guia=" + guia + ", ddd=" + ddd + ", siafi=" + siafi
-				+ ", usuario=" + usuario + "]";
+				+ numero + ", uf=" + uf + ", usuario=" + usuario + "]";
 	}
 
 		
-
-
-	
-	
 }

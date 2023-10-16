@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apiGrupo2.g2.dto.EnderecoDTO;
 import com.apiGrupo2.g2.entities.Endereco;
 import com.apiGrupo2.g2.services.EnderecoService;
 
@@ -28,7 +29,7 @@ public class EnderecoController {
 	}
 	
 	@PostMapping("/salvar")
-	public Endereco salvar (@RequestBody Endereco objetoEndereco) {
+	public Endereco salvar (@RequestBody EnderecoDTO objetoEndereco) {
 		return enderecoService.salvar(objetoEndereco);
 	}
 	
