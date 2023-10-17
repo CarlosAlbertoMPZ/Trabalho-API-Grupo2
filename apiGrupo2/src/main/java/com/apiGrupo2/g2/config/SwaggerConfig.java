@@ -56,7 +56,7 @@ public class SwaggerConfig {
 				.title("Documentação api Trabalho grupo 2")
 				.description("Descrição projeto Grupo 2")
 				.license("Apache licence version 2.0")
-				.version("7.0.0")
+				.version("8.0.0")
 				.build();
 		return apiInfo;
 	}
