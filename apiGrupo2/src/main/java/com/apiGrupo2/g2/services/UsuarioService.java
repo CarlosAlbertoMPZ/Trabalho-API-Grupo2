@@ -75,8 +75,8 @@ public class UsuarioService {
 			registroAntigo.setDataNascimento(objetoUsuario.getDataNascimento());
 		}
 		
-		if (objetoUsuario.getSenha()!=null) {
-			registroAntigo.setSenha(objetoUsuario.getSenha());
+		if (objetoUsuario.getPassword()!=null) {
+			registroAntigo.setPassword(objetoUsuario.getPassword());
 		}
 		
 //		if (objetoUsuario.getRoles()!=null) {
@@ -87,9 +87,6 @@ public class UsuarioService {
 			registroAntigo.setEnderecos(objetoUsuario.getEnderecos());
 		}
 		
-		if (objetoUsuario.getEnderecos()!=null) {
-			registroAntigo.setEnderecos(objetoUsuario.getEnderecos());
-		}
 		
 		if (objetoUsuario.getPedidos()!=null) {
 			registroAntigo.setPedidos(objetoUsuario.getPedidos());
@@ -98,8 +95,16 @@ public class UsuarioService {
 		if (objetoUsuario.getProdutos()!=null) {
 			registroAntigo.setProdutos(objetoUsuario.getProdutos());
 		}
+		
+		if (objetoUsuario.getRoles()!=null) {
+			registroAntigo.setRoles(objetoUsuario.getRoles());
+		}
 				
 		registroAntigo.setId(id);
 		return usuarioRepository.save(registroAntigo);
 	}
+	public Usuario findByEmail(String email){
+      return usuarioRepository.findByEmail(email).get();
+  }
+	
 }
