@@ -87,9 +87,6 @@ public class UsuarioService {
 			registroAntigo.setEnderecos(objetoUsuario.getEnderecos());
 		}
 		
-		if (objetoUsuario.getEnderecos()!=null) {
-			registroAntigo.setEnderecos(objetoUsuario.getEnderecos());
-		}
 		
 		if (objetoUsuario.getPedidos()!=null) {
 			registroAntigo.setPedidos(objetoUsuario.getPedidos());

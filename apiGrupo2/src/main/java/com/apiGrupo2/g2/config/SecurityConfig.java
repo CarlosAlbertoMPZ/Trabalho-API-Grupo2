@@ -67,9 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 	    }
 	
-	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests().anyRequest().permitAll().and().csrf(csrf -> csrf.disable());
-		return http.build();
-	}
+//	@Bean
+//	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//		http.authorizeHttpRequests().anyRequest().permitAll().and().csrf(csrf -> csrf.disable());
+//		return http.build();
+//	}
 }

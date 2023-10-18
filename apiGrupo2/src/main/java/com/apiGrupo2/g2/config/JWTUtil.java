@@ -3,6 +3,7 @@ package com.apiGrupo2.g2.config;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.apiGrupo2.g2.entities.User;
 import com.auth0.jwt.JWT;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
 
+@Component
 public class JWTUtil {
 
 @Value("${jwt-secret}")
