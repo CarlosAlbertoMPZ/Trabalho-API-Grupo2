@@ -5,7 +5,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.apiGrupo2.g2.entities.User;
+
+import com.apiGrupo2.g2.entities.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -45,11 +46,11 @@ public class JWTUtil {
 		}
 	}
 
-	public String generateTokenWithUserData(User user) throws IllegalArgumentException, JWTCreationException {
+	public String generateTokenWithUserData(Usuario usuario) throws IllegalArgumentException, JWTCreationException {
 		ObjectMapper mapper = new ObjectMapper();
 		String userJson = null;
 		try {
-			userJson = mapper.writeValueAsString(user);
+			userJson = mapper.writeValueAsString(usuario);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -63,13 +64,13 @@ public class JWTUtil {
 		JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).withSubject(subject)
 				.withIssuer(companyProjectName).build();
 		DecodedJWT jwt = verifier.verify(token);
-		User user = new User();
+		Usuario usuario = new Usuario();
 		try {
-			user = mapper.readValue(jwt.getClaim("usuario").asString(), User.class);
+			usuario = mapper.readValue(jwt.getClaim("usuario").asString(), Usuario.class);
 		} catch (JsonProcessingException e) {
 			throw new Exception("Ocorreu um erro e nao foi possivel converter o usario a partir da string json - " + e);
 		}
-		return user.getEmail();
+		return usuario.getEmail();
 	}
 
 }

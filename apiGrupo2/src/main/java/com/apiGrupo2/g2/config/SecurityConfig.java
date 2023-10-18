@@ -15,20 +15,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.apiGrupo2.g2.repositories.UserRepository;
+
+import com.apiGrupo2.g2.repositories.UsuarioRepository;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	  @Autowired
-	    UserRepository userRepo;
+	    UsuarioRepository usuarioRepository;
 
 	    @Autowired
 	    JWTFilter filter;
 
 	    @Autowired
-	    UserDetailsServiceImpl uds;
+	    UsuarioDetailsServiceImpl uds;
 
 	    @Bean
 	    @Override
