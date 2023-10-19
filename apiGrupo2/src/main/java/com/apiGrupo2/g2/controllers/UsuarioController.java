@@ -69,19 +69,19 @@ public class UsuarioController {
 		Set<Role> roles = new HashSet<>();
 
 		if (strRoles == null) {
-			Role usuarioRole = roleRepository.findByName(TipoRoleEnum.ROLE_USER)
+			Role usuarioRole = roleRepository.findByName(TipoRoleEnum.ROLE_COMPRADOR)
 					.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
 			roles.add(usuarioRole);
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
-				case "ADMINISTRADOR":
-					Role adminRole = roleRepository.findByName(TipoRoleEnum.ROLE_ADMIN)
+				case "VENDEDOR":
+					Role adminRole = roleRepository.findByName(TipoRoleEnum.ROLE_VENDEDOR)
 							.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
 					roles.add(adminRole);
 					break;
-				case "USUARIO":
-					Role usuarioRole = roleRepository.findByName(TipoRoleEnum.ROLE_USER)
+				case "COMPRADOR":
+					Role usuarioRole = roleRepository.findByName(TipoRoleEnum.ROLE_COMPRADOR)
 							.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
 					roles.add(usuarioRole);
 				}
