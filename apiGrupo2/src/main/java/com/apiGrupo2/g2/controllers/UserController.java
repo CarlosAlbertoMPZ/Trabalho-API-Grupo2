@@ -60,19 +60,19 @@
 //		Set<Role> roles = new HashSet<>();
 //
 //		if (strRoles == null) {
-//			Role userRole = roleRepository.findByName(TipoRoleEnum.ROLE_USER)
+//			Role userRole = roleRepository.findByName(TipoRoleEnum.ROLE_COMPRADOR)
 //					.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
 //			roles.add(userRole);
 //		} else {
 //			strRoles.forEach(role -> {
 //				switch (role) {
-//				case "ADMINISTRADOR":
-//					Role adminRole = roleRepository.findByName(TipoRoleEnum.ROLE_ADMIN)
+//				case "VENDEDOR":
+//					Role adminRole = roleRepository.findByName(TipoRoleEnum.ROLE_VENDEDOR)
 //							.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
 //					roles.add(adminRole);
 //					break;
-//				case "USUARIO":
-//					Role userRole = roleRepository.findByName(TipoRoleEnum.ROLE_USER)
+//				case "COMPRADOR":
+//					Role userRole = roleRepository.findByName(TipoRoleEnum.ROLE_COMPRADOR)
 //							.orElseThrow(() -> new RuntimeException("Erro: Role não encontrada."));
 //					roles.add(userRole);
 //				}
