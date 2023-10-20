@@ -31,6 +31,7 @@ import com.apiGrupo2.g2.entities.Usuario;
 import com.apiGrupo2.g2.enums.TipoRoleEnum;
 import com.apiGrupo2.g2.repositories.EnderecoRepository;
 import com.apiGrupo2.g2.repositories.RoleRepository;
+import com.apiGrupo2.g2.services.EmailService;
 import com.apiGrupo2.g2.services.EnderecoService;
 import com.apiGrupo2.g2.services.UsuarioService;
 
@@ -44,11 +45,14 @@ public class UsuarioController {
 	@Autowired
 	UsuarioService usuarioService;
 	
-//	@Autowired
-//	EnderecoRepository enderecoRepository;
+	@Autowired
+	EmailService emailService;
+	
+	@Autowired
+	EnderecoRepository enderecoRepository;
 
-//	@Autowired
-//	EnderecoService enderecoService;
+	@Autowired
+	EnderecoService enderecoService;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -88,16 +92,16 @@ public class UsuarioController {
 			});
 		}
 
-//		Endereco viaCep = enderecoService.pesquisarEndereco(user.getCep());
-//		Endereco enderecoNovo = new Endereco();
-//		enderecoNovo.setBairro(viaCep.getBairro());
-//		enderecoNovo.setCep(user.getCep());
-//		enderecoNovo.setComplemento(user.getComplementoAdicional());
-//		enderecoNovo.setLocalidade(viaCep.getLocalidade());
-//		enderecoNovo.setLogradouro(viaCep.getLogradouro());
-//		enderecoNovo.setUf(viaCep.getUf());
-//		enderecoNovo.setNumero(user.getNumero());
-//		enderecoRepository.save(enderecoNovo);
+		Endereco viaCep = enderecoService.pesquisarEndereco(usuario.getCep());
+		Endereco enderecoNovo = new Endereco();
+		enderecoNovo.setBairro(viaCep.getBairro());
+		enderecoNovo.setCep(usuario.getCep());
+		enderecoNovo.setComplemento(viaCep.getComplemento());
+		enderecoNovo.setLocalidade(viaCep.getLocalidade());
+		enderecoNovo.setLogradouro(viaCep.getLogradouro());
+		enderecoNovo.setLogradouro(viaCep.getNumero());
+		enderecoNovo.setUf(viaCep.getUf());
+		enderecoRepository.save(enderecoNovo);
 
 		Usuario usuarioResumido = new Usuario();
 		usuarioResumido.setNomeUsuario(usuario.getNomeUsuario());
@@ -106,7 +110,7 @@ public class UsuarioController {
 		String encodedPass = passwordEncoder.encode(usuario.getPassword());
 		usuarioResumido.setPassword(encodedPass);
 
-		// emailService.envioEmailCadastro(email, user);
+		 emailService.envioEmailCadastro(/*email, usuario*/);
 
 		return usuarioService.salvar(usuarioResumido);
 	}

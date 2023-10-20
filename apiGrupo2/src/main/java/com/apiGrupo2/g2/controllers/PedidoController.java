@@ -13,11 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiGrupo2.g2.entities.Pedido;
+import com.apiGrupo2.g2.services.EmailService;
 import com.apiGrupo2.g2.services.PedidoService;
 
 @RestController
 @RequestMapping("/pedido")
 public class PedidoController {
+	
+	private EmailService emailService;
+    @Autowired
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
 	@Autowired
 	PedidoService pedidoService;
@@ -28,7 +35,8 @@ public class PedidoController {
 	}
 	
 	@PostMapping("/salvar")
-	public Pedido salvar (@RequestBody Pedido objetoPedido) {
+	public Pedido salvar (@RequestBody Pedido objetoPedido) {//PedidoDTO
+		emailService.envioEmailPedido(objetoPedido);
 		return pedidoService.salvar(objetoPedido);
 	}
 	@GetMapping("/listar")

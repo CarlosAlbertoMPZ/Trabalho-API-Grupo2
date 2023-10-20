@@ -13,12 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apiGrupo2.g2.entities.Produto;
+import com.apiGrupo2.g2.services.EmailService;
 import com.apiGrupo2.g2.services.ProdutoService;
 
 
 @RestController
 @RequestMapping("/produto")
 public class ProdutoController {
+	
+	private EmailService emailService;
+    @Autowired
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
 	@Autowired
 	ProdutoService produtoService;
@@ -30,6 +37,7 @@ public class ProdutoController {
 	
 	@PostMapping("/salvar")
 	public Produto salvar (@RequestBody Produto objetoProduto) {
+		emailService.envioEmailProduto(objetoProduto);
 		return produtoService.salvar(objetoProduto);
 	}
 	

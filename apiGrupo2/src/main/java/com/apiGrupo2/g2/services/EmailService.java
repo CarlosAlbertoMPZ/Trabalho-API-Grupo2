@@ -18,7 +18,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.apiGrupo2.g2.dto.PedidoDTO;
 import com.apiGrupo2.g2.dto.UserDTO;
+import com.apiGrupo2.g2.entities.Pedido;
+import com.apiGrupo2.g2.entities.Produto;
 import com.apiGrupo2.g2.entities.Usuario;
 
 @Configuration
@@ -27,6 +30,12 @@ public class EmailService {
 
 	@Autowired
 	UsuarioService usuarioService;
+	
+	@Autowired
+	PedidoService pedidoService;
+	
+	@Autowired
+	ProdutoService produtoService;
 	
 	private JavaMailSender emailSender;
 
@@ -80,7 +89,7 @@ public class EmailService {
 			builder.append("		</div>\r\n");
 			builder.append("		<br/>\r\n");
 			builder.append("		<div align=\"center\">\r\n");
-			builder.append("			Em caso de erro, favor contatar o suporte: serratecgrupo1@gmail.com");
+			builder.append("			Em caso de erro, favor contatar o suporte: api.grupo2.serratec@gmail.com");
 			builder.append("		</div>\r\n");
 			builder.append("	</body>\r\n");
 			builder.append("</html>\r\n");
@@ -159,5 +168,139 @@ public class EmailService {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void envioEmailPedido(Pedido pedido) {//(Pedido pedido) la em baixo getValorNota DoubleValor 
+		MimeMessage mensagemCadastro = emailSender.createMimeMessage();// não precisa ser altrada em todos os disparos
+																	// de email, abertura p escrit de emal
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(mensagemCadastro, true);// perm entradas iniciais de email
+			helper.setFrom("api.grupo2.serratec@gmail.com");
+			helper.setTo("carlosalbertompz@gmail.com");
+			helper.setSubject("Pedido Realizado!!");// titulo do email qnd enviamos para alguem
+			
+			LocalDate localDate = LocalDate.now();
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
+			
+			String dataEntrega = localDate.plusDays(7).format(format);
+			
+			Double valor = pedido.getValorPedido();/// getValorPedido
+			DecimalFormat df = new DecimalFormat("R$, ##0.00");
+			
+			StringBuilder builder = new StringBuilder();
+			builder.append("<html>\r\n");//texto email = escreva - \r\n pula linha
+			builder.append("<body>\r\n");
+			builder.append("<div align=\"center\">\r\n");
+			builder.append("<h1>DADOS PEDIDO</h1>\r\n");
+			builder.append("</div>\r\n");
+			builder.append("<br/>\r\n");
+			
+			builder.append("<center>\r\n");
+			builder.append("<table border='2' cellpadding>\r\n");
+			builder.append("<tr> <th> Nome</th> <th> </th> <th> Data de entrega</th> </tr>\r\n");
+			
+			List<Pedido>listapedidos = pedidoService.listar();
+			for(Pedido pedidos : listapedidos) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
+				builder.append("		    <tr>\r\n");
+				builder.append("			<td>\r\n");
+				builder.append(localDate);
+				builder.append("			</td>\r\n");
+				builder.append("			<td>\r\n");
+				builder.append(pedidos.getProdutos());
+				builder.append("			</td>\r\n");
+				builder.append("		    <td>\r\n");
+				builder.append(valor);
+				builder.append("			</td>\r\n");
+				builder.append("			<td>\r\n");
+				builder.append(dataEntrega);
+				builder.append("			</td>\r\n");
+			}
+			
+			builder.append("		</table>\r\n");
+			builder.append("		</center>\r\n");
+			builder.append("		<table border='1' cellpadding='1'  >\r\n");
+			builder.append("<tr><th>Valor Total</th></tr>\r\n");
+			builder.append("			<td>\r\n");
+			builder.append(df.format(valor));
+			builder.append("			</td>\r\n");
+			builder.append("		</table>\r\n");
+			builder.append("	</body>\r\n");
+			builder.append("</html>");
+			
+			helper.setText(builder.toString(), true);
+			emailSender.send(mensagemCadastro);
+			
+			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+	public void envioEmailProduto(Produto produto) {//(Pedido pedido) la em baixo getValorNota DoubleValor 
+		MimeMessage mensagemCadastro = emailSender.createMimeMessage();// não precisa ser altrada em todos os disparos
+																	// de email, abertura p escrit de emal
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(mensagemCadastro, true);// perm entradas iniciais de email
+			helper.setFrom("api.grupo2.serratec@gmail.com");
+			helper.setTo("carlosalbertompz@gmail.com");
+			helper.setSubject("Venda realizada!!");// titulo do email qnd enviamos para alguem
+			
+			LocalDate localDate = LocalDate.now();
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
+			
+			String dataEntrega = localDate.plusDays(7).format(format);
+			
+			Double valor = produto.getValorUnitario();/// getValorPedido
+			DecimalFormat df = new DecimalFormat("R$, ##0.00");
+			
+			StringBuilder builder = new StringBuilder();
+			builder.append("<html>\r\n");//texto email = escreva - \r\n pula linha
+			builder.append("<body>\r\n");
+			builder.append("<div align=\"center\">\r\n");
+			builder.append("<h1>DADOS DA VENDA</h1>\r\n");
+			builder.append("</div>\r\n");
+			builder.append("<br/>\r\n");
+			
+			builder.append("<center>\r\n");
+			builder.append("<table border='2' cellpadding>\r\n");
+			builder.append("<tr> <th> Nome</th> <th> </th> <th> Data de entrega</th> </tr>\r\n");
+			
+			List<Produto>listaProdutos = produtoService.listar();
+			for(Produto produtos : listaProdutos) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
+				builder.append("		    <tr>\r\n");
+				builder.append("			<td>\r\n");
+				builder.append(localDate);
+				builder.append("			</td>\r\n");
+				builder.append("			<td>\r\n");
+				builder.append(produtos.getNome());
+				builder.append("			</td>\r\n");
+				builder.append("		    <td>\r\n");
+				builder.append(valor);
+				builder.append("			</td>\r\n");
+				builder.append("			<td>\r\n");
+				builder.append(produtos.getQuantidadeEstoque());
+				builder.append("			</td>\r\n");
+				builder.append("		    <td>\r\n");
+				builder.append(dataEntrega);
+				builder.append("			</td>\r\n");
+			}
+			
+			builder.append("		</table>\r\n");
+			builder.append("		</center>\r\n");
+			builder.append("		<table border='1' cellpadding='1'  >\r\n");
+			builder.append("<tr><th>Valor Total</th></tr>\r\n");
+			builder.append("			<td>\r\n");
+			builder.append(df.format(valor));
+			builder.append("			</td>\r\n");
+			builder.append("		</table>\r\n");
+			builder.append("	</body>\r\n");
+			builder.append("</html>");
+			
+			helper.setText(builder.toString(), true);
+			emailSender.send(mensagemCadastro);
+			
+			
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 	}
 }

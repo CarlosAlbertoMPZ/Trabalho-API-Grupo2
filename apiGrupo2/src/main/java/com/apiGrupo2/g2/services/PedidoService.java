@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apiGrupo2.g2.dto.PedidoDTO;
 import com.apiGrupo2.g2.entities.Pedido;
 import com.apiGrupo2.g2.repositories.PedidoRepository;
 
@@ -14,10 +15,17 @@ public class PedidoService {
 	@Autowired
 	PedidoRepository pedidoRepository;
 	
+	private EmailService emailService;
+    @Autowired
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
+    }
+	
 	public Integer getContar() {
 		return pedidoRepository.contar();
 	}
 	public Pedido salvar(Pedido objetoPedido) {
+		emailService.envioEmailPedido(objetoPedido);
 		return pedidoRepository.save(objetoPedido);
 	}
 	public Pedido acharId(Integer id) {
@@ -53,8 +61,12 @@ public class PedidoService {
 			registroAntigo.setProdutos(objetoPedido.getProdutos());
 		}
 		
+		if (objetoPedido.getValorPedido()!=null) {
+			registroAntigo.setValorPedido(objetoPedido.getValorPedido());
+		}
+		
 		if (objetoPedido.getUsuario()!=null) {
-			registroAntigo.setUsuario(objetoPedido.getUsuario());
+		registroAntigo.setUsuario(objetoPedido.getUsuario());
 		}
 								
 		registroAntigo.setId(id);

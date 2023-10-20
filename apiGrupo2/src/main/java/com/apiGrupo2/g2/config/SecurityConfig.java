@@ -22,8 +22,8 @@ import com.apiGrupo2.g2.repositories.UsuarioRepository;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
-	  @Autowired
-	    UsuarioRepository usuarioRepository;
+//	    @Autowired
+//	    UsuarioRepository usuarioRepository;
 
 	    @Autowired
 	    JWTFilter filter;

@@ -8,23 +8,33 @@ public class UsuarioDTO {
     private String email;
     private Set<String> roles;
     private String password;
-//  private String cep;
-//	private String numero;
+    private String cep;
+    //private String numero;
     
     
     public UsuarioDTO() {
     	super();
     }
     
-	public UsuarioDTO(String nomeUsuario, String email, Set<String> roles, String password) {
+	    
+	public UsuarioDTO(String nomeUsuario, String email, Set<String> roles, String password, String cep) {
 	super();
 	this.nomeUsuario = nomeUsuario;
 	this.email = email;
 	this.roles = roles;
 	this.password = password;
+	this.cep = cep;
 }
-    
-    
+
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
 	public String getNomeUsuario() {
 		return nomeUsuario;
 	}
@@ -51,6 +61,5 @@ public class UsuarioDTO {
 		this.password = password;
 	}
     
-    
-	
+    	
 }
