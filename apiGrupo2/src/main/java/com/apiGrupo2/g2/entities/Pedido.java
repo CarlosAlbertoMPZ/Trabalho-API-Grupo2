@@ -31,11 +31,14 @@ public class Pedido {
 	
 	@NotNull
 	@Column(name="data_hora_pedido")
-	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+	//@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	private LocalDateTime dataPedido;
 	
 	@Column(name="ativo")
 	private Boolean ativo;
+	
+	@Column(name="Valor_Pedido")
+	private Double valorPedido;
 	
 	@ManyToMany
 	@JoinTable(
@@ -52,24 +55,34 @@ public class Pedido {
 	public Pedido() {
 		super();
 	}
-	
-	public Pedido(Integer id, @NotNull LocalDateTime dataPedido, Boolean ativo, List<Produto> produtos,
-			Usuario usuario) {
+		
+
+	public Pedido(Integer id, @NotNull LocalDateTime dataPedido, Boolean ativo, Double valorPedido,
+			List<Produto> produtos, Usuario usuario) {
 		super();
 		this.id = id;
 		this.dataPedido = dataPedido;
 		this.ativo = ativo;
+		this.valorPedido = valorPedido;
 		this.produtos = produtos;
 		this.usuario = usuario;
 	}
 
-
 	public Usuario getUsuario() {
 		return usuario;
 	}
-
+	
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+
+	public Double getValorPedido() {
+		return valorPedido;
+	}
+
+	public void setValorPedido(Double valorPedido) {
+		this.valorPedido = valorPedido;
 	}
 
 	public Integer getId() {
@@ -108,9 +121,8 @@ public class Pedido {
 
 	@Override
 	public String toString() {
-		return "Pedido [id=" + id + ", dataPedido=" + dataPedido + ", ativo=" + ativo + ", produtos=" + produtos + "]";
+		return "Pedido [id=" + id + ", dataPedido=" + dataPedido + ", ativo=" + ativo + ", valorPedido=" + valorPedido
+				+ ", produtos=" + produtos + ", usuario=" + usuario + "]";
 	}
-
-
 		
 }

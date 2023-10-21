@@ -1,6 +1,9 @@
 package com.apiGrupo2.g2.dto;
 
+import java.util.List;
 import java.util.Set;
+
+import com.apiGrupo2.g2.entities.Produto;
 
 public class UserDTO {
 
@@ -8,7 +11,7 @@ public class UserDTO {
     private String email;
     private Set<String> roles;
     private String password;
-    
+    private List<Produto> produtos;
     private String cep;
 	private String numero;
 	private String complementoAdicional;

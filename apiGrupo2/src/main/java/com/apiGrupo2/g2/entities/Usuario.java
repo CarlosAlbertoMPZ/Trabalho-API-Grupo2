@@ -31,7 +31,7 @@ public class Usuario {
 	@Column(name="id_usuario")
 	private Integer id;
 	
-	@NotNull
+	
 	@Size(max=100)
 	@Column(name="nome")
 	private String nome;
@@ -75,7 +75,8 @@ public class Usuario {
 
 	//private List<String> roles; // OBS String virar enum
 
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)//nome da tabela. Cascade serve para propagar os comandos do banco para os filhos do usuario. 
+	@OneToMany(cascade = CascadeType.ALL)//nome da tabela. Cascade serve para propagar os comandos do banco para os filhos do usuario. 
+	@JoinColumn(name="usuario_id")
 	// @JsonManagedReference - evitar o lupping infinito....
 	private List<Endereco> enderecos;
 
@@ -97,7 +98,7 @@ public class Usuario {
 		super();
 	}
 	
-	public Usuario(Integer id, @NotNull @Size(max = 100) String nome, @Size(max = 20) String telefone,
+	public Usuario(Integer id, @Size(max = 100) String nome, @Size(max = 20) String telefone,
 			@Size(max = 20) String celular, @NotNull @Size(max = 100) String nomeUsuario,
 			@NotNull @Size(max = 100) String email, @Size(max = 20) String cpf, LocalDate dataNascimento, Boolean ativo,
 			String password, List<Endereco> enderecos, List<Pedido> pedidos, List<Produto> produtos, Set<Role> roles) {
