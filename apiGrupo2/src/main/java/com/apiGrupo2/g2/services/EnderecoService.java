@@ -107,10 +107,7 @@ public class EnderecoService {
 		if (objetoEndereco.getLocalidade()!=null) {
 			registroAntigo.setLocalidade(objetoEndereco.getLocalidade());
 		}
-						
-		if (objetoEndereco.getUsuario()!=null) {
-			registroAntigo.setUsuario(objetoEndereco.getUsuario());
-		}
+		
 								
 		registroAntigo.setId(id);
 		return enderecoRepository.save(registroAntigo);

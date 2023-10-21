@@ -75,7 +75,8 @@ public class Usuario {
 
 	//private List<String> roles; // OBS String virar enum
 
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)//nome da tabela. Cascade serve para propagar os comandos do banco para os filhos do usuario. 
+	@OneToMany(cascade = CascadeType.ALL)//nome da tabela. Cascade serve para propagar os comandos do banco para os filhos do usuario. 
+	@JoinColumn(name="usuario_id")
 	// @JsonManagedReference - evitar o lupping infinito....
 	private List<Endereco> enderecos;
 

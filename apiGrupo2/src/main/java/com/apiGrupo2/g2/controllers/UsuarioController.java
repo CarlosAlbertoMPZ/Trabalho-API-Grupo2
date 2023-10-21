@@ -1,5 +1,6 @@
 package com.apiGrupo2.g2.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -23,8 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apiGrupo2.g2.config.JWTUtil;
 import com.apiGrupo2.g2.dto.LoginDTO;
+import com.apiGrupo2.g2.dto.MessageResponseDTO;
 import com.apiGrupo2.g2.dto.UserDTO;
 import com.apiGrupo2.g2.dto.UsuarioDTO;
+import com.apiGrupo2.g2.dto.UsuarioResponseDTO;
 import com.apiGrupo2.g2.entities.Endereco;
 import com.apiGrupo2.g2.entities.Role;
 import com.apiGrupo2.g2.entities.Usuario;
@@ -67,7 +72,7 @@ public class UsuarioController {
 	private PasswordEncoder passwordEncoder;
 	
 	@PostMapping("/registro")
-	public Usuario cadastro(@RequestParam String email, @RequestBody UsuarioDTO usuario) {
+	public ResponseEntity<MessageResponseDTO> cadastro(@RequestParam String email, @RequestBody UsuarioDTO usuario) {
 
 		Set<String> strRoles = usuario.getRoles();
 		Set<Role> roles = new HashSet<>();
@@ -99,9 +104,10 @@ public class UsuarioController {
 		enderecoNovo.setComplemento(viaCep.getComplemento());
 		enderecoNovo.setLocalidade(viaCep.getLocalidade());
 		enderecoNovo.setLogradouro(viaCep.getLogradouro());
-		enderecoNovo.setLogradouro(viaCep.getNumero());
+		enderecoNovo.setNumero(usuario.getNumero());
 		enderecoNovo.setUf(viaCep.getUf());
-		enderecoRepository.save(enderecoNovo);
+		enderecoNovo.setAtivo(true);
+		
 
 		Usuario usuarioResumido = new Usuario();
 		usuarioResumido.setNomeUsuario(usuario.getNomeUsuario());
@@ -109,14 +115,26 @@ public class UsuarioController {
 		usuarioResumido.setRoles(roles);
 		String encodedPass = passwordEncoder.encode(usuario.getPassword());
 		usuarioResumido.setPassword(encodedPass);
-
-		 emailService.envioEmailCadastro(/*email, usuario*/);
-
-		return usuarioService.salvar(usuarioResumido);
+		usuarioResumido.setCelular(usuario.getCelular());
+		usuarioResumido.setCpf(usuario.getCpf());
+		usuarioResumido.setTelefone(usuario.getTelefone());
+		usuarioResumido.setNome(usuario.getNome());
+		usuarioResumido.setDataNascimento(usuario.getDataNascimento());
+		usuarioResumido.setAtivo(true);
+		enderecoRepository.save(enderecoNovo);
+		List<Endereco> enderecos = new ArrayList<>();
+		enderecos.add(enderecoNovo);
+		usuarioResumido.setEnderecos(enderecos);
+		
+		
+		usuarioService.salvar(usuarioResumido);
+		emailService.envioEmailCadastro(/*email, usuario*/);
+		
+		return ResponseEntity.ok(new MessageResponseDTO("Parabens você finalizou o trabalho com muito custo!"));
 	}
 	
 	@PostMapping("/logar")
-	public Map<String, Object> logar(@RequestBody LoginDTO body) {
+	public ResponseEntity<?>logar(@RequestBody LoginDTO body) {
 		try {
 			UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
 					body.getEmail(), body.getPassword());
@@ -131,7 +149,10 @@ public class UsuarioController {
 			usuarioResumido.setRoles(usuario.getRoles());
 			String token = jwtUtil.generateTokenWithUserData(usuarioResumido);
 
-			return Collections.singletonMap("jwt-token", token);
+			
+			MessageResponseDTO retornoLogin = new MessageResponseDTO("Parabens você finalizou o trabalho com muito custo!", token);
+			return ResponseEntity.ok().body(retornoLogin);
+			
 		} catch (AuthenticationException authExc) {
 			throw new RuntimeException("Credenciais Invalidas");
 		}

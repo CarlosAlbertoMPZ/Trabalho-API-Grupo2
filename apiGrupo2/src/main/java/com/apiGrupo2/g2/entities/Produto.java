@@ -22,7 +22,7 @@ public class Produto {
 	@Column(name="id_produto")
 	private Integer id;
 	
-	@NotNull
+	
 	@Size(max=100)
 	@Column(name="nome")
 	private String nome;
@@ -31,15 +31,15 @@ public class Produto {
 	@Column(name="descricao")
 	private String descricao;
 	
-	@NotNull
+	
 	@Column(name="dataFabricacao_produto")
 	private LocalDateTime dataFabricacao;
 	
-	@NotNull
+	
 	@Column(name="quantidade_estoque")
 	private Integer quantidadeEstoque;
 	
-	@NotNull
+	
 	@Column(name="valor_unitario")
 	private Double valorUnitario;
 	

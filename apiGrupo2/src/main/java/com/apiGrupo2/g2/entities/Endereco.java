@@ -16,63 +16,61 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 //import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name="endereco")
+@Table(name = "endereco")
 public class Endereco {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id_endereco")
+	@Column(name = "id_endereco")
 	private Integer id;
-	
-	@Column(name="ativo")
-	private Boolean ativo;
-	
-	@NotNull
-	@Size(max=20)
-	@Column(name="cep")	
-	private String cep;
-	
-	@Size(max=100)
-	@Column(name="logradouro")
-	private String logradouro;//logradouro
-	
-	@Size(max=100)
-	@Column(name="complemento")
-	private String complemento;
-	
-	@Size(max=50)
-	@Column(name="bairro")
-	private String bairro;
-			
-	@NotNull
-	@Size(max=20)
-	@Column(name="localidade")//localidade
-	private String localidade;
-		
-	@Column(name="numero")
-	private String numero;//string
-			
-	@Column(name="uf")
-	private String uf;
-	
-	@JsonProperty(access=JsonProperty.Access.READ_ONLY)//mapeamento no endereço
-	//1 usuario tem 1 endereço
-	@ManyToOne
-	@JoinColumn(name="id_usuario")
-	// @JsonBackReference
-//	@Size(max=30)
-//	@Column(name="usuario_endereco")
-	private Usuario usuario;
 
-		
+	@Column(name = "ativo")
+	private Boolean ativo;
+
+	@NotNull
+	@Size(max = 20)
+	@Column(name = "cep")
+	private String cep;
+
+	@Size(max = 100)
+	@Column(name = "logradouro")
+	private String logradouro;// logradouro
+
+	@Size(max = 100)
+	@Column(name = "complemento")
+	private String complemento;
+
+	@Size(max = 50)
+	@Column(name = "bairro")
+	private String bairro;
+
+	@NotNull
+	@Size(max = 20)
+	@Column(name = "localidade") // localidade
+	private String localidade;
+
+	@Column(name = "numero")
+	private String numero;// string
+
+	@Column(name = "uf")
+	private String uf;
+
+//	@JsonProperty(access=JsonProperty.Access.READ_ONLY)//mapeamento no endereço
+//	//1 usuario tem 1 endereço
+//	@ManyToOne
+//	@JoinColumn(name="id_usuario")
+//	// @JsonBackReference
+////	@Size(max=30)
+////	@Column(name="usuario_endereco")
+//	private Usuario usuario;
+
 	public Endereco() {
 		super();
 	}
 
-		
 	public Endereco(Integer id, Boolean ativo, @NotNull @Size(max = 20) String cep, @Size(max = 100) String logradouro,
 			@Size(max = 100) String complemento, @Size(max = 50) String bairro,
-			@NotNull @Size(max = 20) String localidade, String numero, String uf, Usuario usuario) {
+			@NotNull @Size(max = 20) String localidade, String numero, String uf) {
 		super();
 		this.id = id;
 		this.ativo = ativo;
@@ -83,11 +81,8 @@ public class Endereco {
 		this.localidade = localidade;
 		this.numero = numero;
 		this.uf = uf;
-		this.usuario = usuario;
+
 	}
-
-
-
 
 	public Integer getId() {
 		return id;
@@ -161,22 +156,11 @@ public class Endereco {
 		this.uf = uf;
 	}
 
-	
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-
 	@Override
 	public String toString() {
 		return "Endereco [id=" + id + ", ativo=" + ativo + ", cep=" + cep + ", logradouro=" + logradouro
 				+ ", complemento=" + complemento + ", bairro=" + bairro + ", localidade=" + localidade + ", numero="
-				+ numero + ", uf=" + uf + ", usuario=" + usuario + "]";
+				+ numero + ", uf=" + uf + "]";
 	}
 
-		
 }
