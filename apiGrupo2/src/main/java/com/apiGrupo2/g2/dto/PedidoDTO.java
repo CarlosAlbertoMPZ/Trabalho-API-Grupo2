@@ -1,20 +1,38 @@
 package com.apiGrupo2.g2.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PedidoDTO {
 
+	private Integer idUsuario;
+	private List<ProdutoPedidoDTO> produtoPedidoDTO;
 	private LocalDateTime dataPedido;
-	private Double valorPedido;
-	
+
 	public PedidoDTO() {
 		super();
 	}
 
-	public PedidoDTO(LocalDateTime dataPedido, Double valorPedido) {
-		super();
+	public PedidoDTO(Integer idUsuario, List<ProdutoPedidoDTO> produtoPedidoDTO, LocalDateTime dataPedido) {
+		this.idUsuario = idUsuario;
+		this.produtoPedidoDTO = produtoPedidoDTO;
 		this.dataPedido = dataPedido;
-		this.valorPedido = valorPedido;
+	}
+
+	public Integer getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Integer idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+	public List<ProdutoPedidoDTO> getProdutoPedidoDTO() {
+		return produtoPedidoDTO;
+	}
+
+	public void setProdutoPedidoDTO(List<ProdutoPedidoDTO> produtoPedidoDTO) {
+		this.produtoPedidoDTO = produtoPedidoDTO;
 	}
 
 	public LocalDateTime getDataPedido() {
@@ -25,12 +43,4 @@ public class PedidoDTO {
 		this.dataPedido = dataPedido;
 	}
 
-	public Double getValorPedido() {
-		return valorPedido;
-	}
-
-	public void setValorPedido(Double valorPedido) {
-		this.valorPedido = valorPedido;
-	}
-		
 }

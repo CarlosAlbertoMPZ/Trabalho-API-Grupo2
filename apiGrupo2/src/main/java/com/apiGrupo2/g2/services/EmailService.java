@@ -199,16 +199,13 @@ public class EmailService {
 			builder.append("<table border='2' cellpadding>\r\n");
 			builder.append("<tr> <th> Nome</th> <th> </th> <th> Data de entrega</th> </tr>\r\n");
 			
-			List<Pedido>listapedidos = pedidoService.listar();
-			for(Pedido pedidos : listapedidos) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
+			List<Produto> listaprodutos = pedido.getProdutos();
+			for(Produto produto : listaprodutos) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
 				builder.append("		    <tr>\r\n");
 				builder.append("			<td>\r\n");
 				builder.append(localDate);
 				builder.append("			</td>\r\n");
 				builder.append("			<td>\r\n");
-				builder.append(pedidos.getProdutos());
-				builder.append("			</td>\r\n");
-				builder.append("		    <td>\r\n");
 				builder.append(valor);
 				builder.append("			</td>\r\n");
 				builder.append("			<td>\r\n");
