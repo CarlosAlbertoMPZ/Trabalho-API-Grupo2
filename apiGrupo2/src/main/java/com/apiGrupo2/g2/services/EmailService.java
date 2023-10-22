@@ -19,6 +19,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.apiGrupo2.g2.dto.PedidoDTO;
+import com.apiGrupo2.g2.dto.ProdutoRequestCadastroDTO;
 import com.apiGrupo2.g2.dto.UserDTO;
 import com.apiGrupo2.g2.entities.Pedido;
 import com.apiGrupo2.g2.entities.Produto;
@@ -232,7 +233,7 @@ public class EmailService {
 			e.printStackTrace();
 		}
 	}
-	public void envioEmailProduto(Produto produto) {//(Pedido pedido) la em baixo getValorNota DoubleValor 
+	public void envioEmailProduto(ProdutoRequestCadastroDTO pdtReqDTO) {//(Pedido pedido) la em baixo getValorNota DoubleValor 
 		MimeMessage mensagemCadastro = emailSender.createMimeMessage();// não precisa ser altrada em todos os disparos
 																	// de email, abertura p escrit de emal
 		try {
@@ -246,7 +247,7 @@ public class EmailService {
 			
 			String dataEntrega = localDate.plusDays(7).format(format);
 			
-			Double valor = produto.getValorUnitario();/// getValorPedido
+			Double valor = pdtReqDTO.getValorUnitario();/// getValorPedido
 			DecimalFormat df = new DecimalFormat("R$, ##0.00");
 			
 			StringBuilder builder = new StringBuilder();

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apiGrupo2.g2.dto.ProdutoRequestCadastroDTO;
+import com.apiGrupo2.g2.dto.ProdutoResponseDTO;
 import com.apiGrupo2.g2.entities.Produto;
 import com.apiGrupo2.g2.services.EmailService;
 import com.apiGrupo2.g2.services.ProdutoService;
@@ -36,9 +38,9 @@ public class ProdutoController {
 	}
 	
 	@PostMapping("/salvar")
-	public Produto salvar (@RequestBody Produto objetoProduto) {
-		emailService.envioEmailProduto(objetoProduto);
-		return produtoService.salvar(objetoProduto);
+	public ProdutoResponseDTO salvar (@RequestBody ProdutoRequestCadastroDTO pdtReqDTO) {
+		emailService.envioEmailProduto(pdtReqDTO);
+		return produtoService.salvar(pdtReqDTO);
 	}
 	
 	@GetMapping("/listar")

@@ -1,6 +1,5 @@
 package com.apiGrupo2.g2.dto;
 
-
 public class ProdutoRequestCadastroDTO {
 
 	private String nome;
@@ -11,16 +10,19 @@ public class ProdutoRequestCadastroDTO {
 
 	private Double valorUnitario;
 
-	public ProdutoRequestCadastroDTO() {
-		super();
-	}
+	private String nomeCategoria;// idCategoria
 
-	public ProdutoRequestCadastroDTO(String nome, String descricao, Integer quantidadeEstoque, Double valorUnitario) {
+	private String cpfUsuario;// idUsuario
+
+	public ProdutoRequestCadastroDTO(String nome, String descricao, Integer quantidadeEstoque, Double valorUnitario,
+			String nomeCategoria, String cpfUsuario) {
 		super();
 		this.nome = nome;
 		this.descricao = descricao;
 		this.quantidadeEstoque = quantidadeEstoque;
 		this.valorUnitario = valorUnitario;
+		this.nomeCategoria = nomeCategoria;
+		this.cpfUsuario = cpfUsuario;
 	}
 
 	public String getNome() {
@@ -53,6 +55,22 @@ public class ProdutoRequestCadastroDTO {
 
 	public void setValorUnitario(Double valorUnitario) {
 		this.valorUnitario = valorUnitario;
+	}
+
+	public String getNomeCategoria() {
+		return nomeCategoria;
+	}
+
+	public void setNomeCategoria(String nomeCategoria) {
+		this.nomeCategoria = nomeCategoria;
+	}
+
+	public String getCpfUsuario() {
+		return cpfUsuario;
+	}
+
+	public void setCpfUsuario(String cpfUsuario) {
+		this.cpfUsuario = cpfUsuario;
 	}
 
 }

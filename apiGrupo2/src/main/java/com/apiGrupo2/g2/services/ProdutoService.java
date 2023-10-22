@@ -5,8 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apiGrupo2.g2.dto.ProdutoRequestCadastroDTO;
+import com.apiGrupo2.g2.dto.ProdutoResponseDTO;
+import com.apiGrupo2.g2.entities.Categoria;
 import com.apiGrupo2.g2.entities.Produto;
+import com.apiGrupo2.g2.entities.Usuario;
+import com.apiGrupo2.g2.repositories.CategoriaRepository;
 import com.apiGrupo2.g2.repositories.ProdutoRepository;
+import com.apiGrupo2.g2.repositories.UsuarioRepository;
 
 @Service
 public class ProdutoService {
@@ -14,12 +20,35 @@ public class ProdutoService {
 	@Autowired
 	ProdutoRepository produtoRepository;
 	
+	@Autowired
+	UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	CategoriaRepository categoriaRepository;
+	
+	
 	public Integer getContar() {
 		return produtoRepository.contar();
 	}
 	
-	public Produto salvar(Produto objetoUsuario) {
-		return produtoRepository.save(objetoUsuario);
+	public ProdutoResponseDTO salvar(ProdutoRequestCadastroDTO catReqDTO) {
+		Produto produto = new Produto();
+		produto.setAtivo(true);
+		produto.setNome(catReqDTO.getNome());
+		produto.setDescricao(catReqDTO.getDescricao());
+		produto.setValorUnitario(catReqDTO.getValorUnitario());
+		produto.setQuantidadeEstoque(catReqDTO.getQuantidadeEstoque());
+		Usuario usuario = usuarioRepository.findByCpf(catReqDTO.getCpfUsuario());
+		Categoria categoria = categoriaRepository.findByNome(catReqDTO.getNomeCategoria());
+		
+		produto.setCategoria(categoria);
+		produto.setUsuario(usuario);
+		
+		produtoRepository.save(produto);
+		
+		ProdutoResponseDTO produtoRspDTO = new ProdutoResponseDTO(produto);
+		
+		return produtoRspDTO;
 	}
 	
 	public Produto acharId(Integer id) {

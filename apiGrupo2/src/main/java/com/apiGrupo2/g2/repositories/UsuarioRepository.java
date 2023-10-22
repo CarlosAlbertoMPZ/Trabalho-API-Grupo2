@@ -14,5 +14,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 	@Query(value = "select count(*) from usuario", nativeQuery = true)
 	public Integer contar();
 	
+	@Query(value="select*from usuario where cpf = :cpf",nativeQuery = true)
+	public Usuario findByCpf(String cpf);
+	
 	Optional<Usuario> findByEmail(String email);
 }
