@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.apiGrupo2.g2.entities.Pedido;
+import com.apiGrupo2.g2.entities.PedidoProduto;
 import com.apiGrupo2.g2.entities.Produto;
 
 public class PedidoResponseCadastroDTO {
@@ -27,9 +28,14 @@ public class PedidoResponseCadastroDTO {
 		this.ativo = pedido.getAtivo();
 		this.cpfUsuario = pedido.getUsuario().getCpf();
 		this.valorTotalPedido = pedido.getValorPedido();
-		this.produtosPedidosResponse = produtosPedidosResponse;
-		
-		
+		/*
+		for (PedidoProduto pedidoProduto: pedido.getPedidoProduto()) {
+			ProdutoPedidoResponse produtoPedidoResponse = new ProdutoPedidoResponse();
+			produtoPedidoResponse.setIdProduto(pedidoProduto.getId().getProduto().getId());
+			produtoPedidoResponse.setQuantidade(quantidade);
+			produtoPedidoResponse.setValorUnitario(pedidoProduto.getId().getProduto().getId());
+		}
+		*/
 	}
 
 	public Double getValorTotalPedido() {

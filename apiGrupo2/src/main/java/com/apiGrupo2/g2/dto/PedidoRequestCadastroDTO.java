@@ -1,7 +1,5 @@
 package com.apiGrupo2.g2.dto;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PedidoRequestCadastroDTO {

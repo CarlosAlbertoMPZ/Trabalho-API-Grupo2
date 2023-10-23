@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -89,6 +90,7 @@ public class EmailService {
 			builder.append("			<h1>Cadastro realizado com sucesso!</h1>\r\n");
 			builder.append("		</div>\r\n");
 			builder.append("		<br/>\r\n");
+			builder.append("		<img src =\"cid:imagemLIZ\">\r\n");
 			builder.append("		<div align=\"center\">\r\n");
 			builder.append("			Em caso de erro, favor contatar o suporte: api.grupo2.serratec@gmail.com");
 			builder.append("		</div>\r\n");
@@ -96,6 +98,8 @@ public class EmailService {
 			builder.append("</html>\r\n");
 
 			helper.setText(builder.toString(), true);
+			ClassPathResource img= new ClassPathResource("img/imagemLIZ.jpg");
+			helper.addInline("imagemLIZ", img);
 			emailSender.send(mensagemCadastro);
 
 		} catch (MessagingException e) {
@@ -200,8 +204,8 @@ public class EmailService {
 			builder.append("<table border='2' cellpadding>\r\n");
 			builder.append("<tr> <th> Nome</th> <th> </th> <th> Data de entrega</th> </tr>\r\n");
 			
-			List<Produto> listaprodutos = pedido.getProdutos();
-			for(Produto produto : listaprodutos) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
+			//List<Produto> listaprodutos = pedido.getProdutos();
+			/*for(Produto produto : listaprodutos) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
 				builder.append("		    <tr>\r\n");
 				builder.append("			<td>\r\n");
 				builder.append(localDate);
@@ -212,7 +216,7 @@ public class EmailService {
 				builder.append("			<td>\r\n");
 				builder.append(dataEntrega);
 				builder.append("			</td>\r\n");
-			}
+			}*/
 			
 			builder.append("		</table>\r\n");
 			builder.append("		</center>\r\n");
