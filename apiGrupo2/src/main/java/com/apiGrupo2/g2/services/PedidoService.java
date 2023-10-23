@@ -1,6 +1,7 @@
 package com.apiGrupo2.g2.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apiGrupo2.g2.dto.PedidoDTO;
+import com.apiGrupo2.g2.dto.PedidoRequestCadastroDTO;
+import com.apiGrupo2.g2.dto.PedidoResponseCadastroDTO;
 import com.apiGrupo2.g2.dto.ProdutoPedidoDTO;
+import com.apiGrupo2.g2.dto.ProdutoPedidoResponse;
 import com.apiGrupo2.g2.entities.Pedido;
+import com.apiGrupo2.g2.entities.PedidoProduto;
 import com.apiGrupo2.g2.entities.Produto;
 import com.apiGrupo2.g2.entities.Usuario;
 import com.apiGrupo2.g2.repositories.PedidoRepository;
@@ -37,20 +42,21 @@ public class PedidoService {
 	public Integer getContar() {
 		return pedidoRepository.contar();
 	}
-	public Pedido salvar(PedidoDTO pedidoDTO) throws Exception {
+	public PedidoResponseCadastroDTO salvar(PedidoRequestCadastroDTO pedidoDTO) throws Exception {
 		// verificando se o usuario existe
-		Optional<Usuario> usuarioOpt = usuarioRepository.findById(pedidoDTO.getIdUsuario());
-		if (usuarioOpt.isEmpty()) {
+		Usuario usuario = usuarioRepository.findByCpf(pedidoDTO.getCpfUsuario());
+		if (usuario == null) {
 			throw new Exception("Usuario não cadastrado"); // criar exceção
 		}
 		
 		Pedido pedido = new Pedido();
-		pedido.setUsuario(usuarioOpt.get());
+		pedido.setUsuario(usuario);
 		pedido.setAtivo(true);
 		pedido.setDataPedido(LocalDateTime.now());
 		
 		Double valorTotalPedido = 0.0;
-		for(ProdutoPedidoDTO produtoPedidoDTO: pedidoDTO.getProdutoPedidoDTO()) {
+		List<PedidoProduto> pedidosProdutos = new ArrayList<>();
+		for(ProdutoPedidoDTO produtoPedidoDTO: pedidoDTO.getProdutosPedidos()) {
 			// verificando se o produto existe
 			Optional<Produto> produtoOpt = produtoRepository.findById(produtoPedidoDTO.getIdProduto());
 			if (produtoOpt.isEmpty()) {
@@ -58,17 +64,30 @@ public class PedidoService {
 			}
 			Produto produto = produtoOpt.get();
 			
-			pedido.getProdutos().add(produto);
 			// calculando o valor do produto * quantidade e somando no total
 			valorTotalPedido += produto.getValorUnitario() * produtoPedidoDTO.getQuantidade();
+			
+			PedidoProduto pedidoProduto = new PedidoProduto(pedido, produto, produtoPedidoDTO.getQuantidade());
+			pedidosProdutos.add(pedidoProduto);
 		}
 		pedido.setValorPedido(valorTotalPedido);
+		pedido.setPedidoProduto(pedidosProdutos);
 		
-		pedidoRepository.save(pedido);
+		pedido = pedidoRepository.save(pedido);
 		
 		emailService.envioEmailPedido(pedido);
 		
-		return pedido;
+		PedidoResponseCadastroDTO pedidoResponseCadastroDTO = new PedidoResponseCadastroDTO(pedido);
+		for (PedidoProduto pedidoProduto: pedido.getPedidoProduto()) {
+			ProdutoPedidoResponse produtoPedidoResponse = new ProdutoPedidoResponse();
+			produtoPedidoResponse.setIdProduto(pedidoProduto.getId().getProduto().getId());
+			produtoPedidoResponse.setQuantidade(pedidoProduto.getQuantidadeProduto());
+			produtoPedidoResponse.setValorUnitario(pedidoProduto.getId().getProduto().getValorUnitario());
+			
+			pedidoResponseCadastroDTO.getProdutosPedidosResponse().add(produtoPedidoResponse);
+		}
+		
+		return pedidoResponseCadastroDTO;
 	}
 	public Pedido acharId(Integer id) {
 		return pedidoRepository.findById(id).get();
@@ -99,9 +118,11 @@ public class PedidoService {
 			registroAntigo.setDataPedido(objetoPedido.getDataPedido());
 		}
 		
+		/*
 		if (objetoPedido.getProdutos()!=null) {
 			registroAntigo.setProdutos(objetoPedido.getProdutos());
 		}
+		*/
 		
 		if (objetoPedido.getValorPedido()!=null) {
 			registroAntigo.setValorPedido(objetoPedido.getValorPedido());

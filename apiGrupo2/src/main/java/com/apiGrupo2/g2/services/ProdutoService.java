@@ -1,5 +1,6 @@
 package com.apiGrupo2.g2.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,13 @@ public class ProdutoService {
 		produto.setDescricao(catReqDTO.getDescricao());
 		produto.setValorUnitario(catReqDTO.getValorUnitario());
 		produto.setQuantidadeEstoque(catReqDTO.getQuantidadeEstoque());
+		produto.setDataFabricacao(catReqDTO.getDataFabricacao());
 		Usuario usuario = usuarioRepository.findByCpf(catReqDTO.getCpfUsuario());
 		Categoria categoria = categoriaRepository.findByNome(catReqDTO.getNomeCategoria());
 		
 		produto.setCategoria(categoria);
 		produto.setUsuario(usuario);
+		//produto.setDataFabricacao(LocalDateTime.now());
 		
 		produtoRepository.save(produto);
 		

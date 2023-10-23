@@ -1,5 +1,7 @@
 package com.apiGrupo2.g2.dto;
 
+import java.time.LocalDateTime;
+
 public class ProdutoRequestCadastroDTO {
 
 	private String nome;
@@ -14,8 +16,10 @@ public class ProdutoRequestCadastroDTO {
 
 	private String cpfUsuario;// idUsuario
 
+	private LocalDateTime dataFabricacao;
+
 	public ProdutoRequestCadastroDTO(String nome, String descricao, Integer quantidadeEstoque, Double valorUnitario,
-			String nomeCategoria, String cpfUsuario) {
+			String nomeCategoria, String cpfUsuario, LocalDateTime dataFabricacao) {
 		super();
 		this.nome = nome;
 		this.descricao = descricao;
@@ -23,6 +27,15 @@ public class ProdutoRequestCadastroDTO {
 		this.valorUnitario = valorUnitario;
 		this.nomeCategoria = nomeCategoria;
 		this.cpfUsuario = cpfUsuario;
+		this.dataFabricacao = dataFabricacao;
+	}
+
+	public LocalDateTime getDataFabricacao() {
+		return dataFabricacao;
+	}
+
+	public void setDataFabricacao(LocalDateTime dataFabricacao) {
+		this.dataFabricacao = dataFabricacao;
 	}
 
 	public String getNome() {

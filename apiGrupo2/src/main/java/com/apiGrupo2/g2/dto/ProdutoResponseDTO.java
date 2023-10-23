@@ -1,5 +1,7 @@
 package com.apiGrupo2.g2.dto;
 
+import java.time.LocalDateTime;
+
 import com.apiGrupo2.g2.entities.Produto;
 
 public class ProdutoResponseDTO {
@@ -20,12 +22,15 @@ public class ProdutoResponseDTO {
 
 	private String cpfUsuario;// idUsuario
 
+	private LocalDateTime dataFabricacao;
+
 	public ProdutoResponseDTO() {
 		super();
 	}
 
 	public ProdutoResponseDTO(Integer id, String nome, String descricao, Integer quantidadeEstoque,
-			Double valorUnitario, Boolean ativo, String nomeCategoria, String cpfUsuario) {
+			Double valorUnitario, Boolean ativo, String nomeCategoria, String cpfUsuario,
+			LocalDateTime dataFabricacao) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -35,8 +40,8 @@ public class ProdutoResponseDTO {
 		this.ativo = ativo;
 		this.nomeCategoria = nomeCategoria;
 		this.cpfUsuario = cpfUsuario;
+		this.dataFabricacao = dataFabricacao;
 	}
-	
 
 	public ProdutoResponseDTO(Produto produto) {
 		super();
@@ -48,6 +53,7 @@ public class ProdutoResponseDTO {
 		this.ativo = produto.getAtivo();
 		this.nomeCategoria = produto.getCategoria().getNome();
 		this.cpfUsuario = produto.getUsuario().getCpf();
+		this.dataFabricacao = produto.getDataFabricacao();
 	}
 
 	public String getNomeCategoria() {
