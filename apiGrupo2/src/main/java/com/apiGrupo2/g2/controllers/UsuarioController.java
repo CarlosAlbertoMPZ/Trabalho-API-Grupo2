@@ -131,7 +131,7 @@ public class UsuarioController {
 		emailService.envioEmailCadastro(/*email, usuario*/);
 		
 		return ResponseEntity.ok(new MessageResponseDTO("Parabens você finalizou o trabalho com muito custo!"));
-	}
+	}//mensagem de retorno positivo
 	
 	@PostMapping("/logar")
 	public ResponseEntity<?>logar(@RequestBody LoginDTO body) {
