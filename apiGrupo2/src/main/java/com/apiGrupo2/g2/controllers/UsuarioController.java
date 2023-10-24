@@ -1,14 +1,11 @@
 package com.apiGrupo2.g2.controllers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apiGrupo2.g2.config.JWTUtil;
 import com.apiGrupo2.g2.dto.LoginDTO;
 import com.apiGrupo2.g2.dto.MessageResponseDTO;
-import com.apiGrupo2.g2.dto.UserDTO;
 import com.apiGrupo2.g2.dto.UsuarioDTO;
+import com.apiGrupo2.g2.dto.UsuarioRequestDTO;
 import com.apiGrupo2.g2.dto.UsuarioResponseDTO;
 import com.apiGrupo2.g2.entities.Endereco;
 import com.apiGrupo2.g2.entities.Role;
@@ -39,6 +36,8 @@ import com.apiGrupo2.g2.repositories.RoleRepository;
 import com.apiGrupo2.g2.services.EmailService;
 import com.apiGrupo2.g2.services.EnderecoService;
 import com.apiGrupo2.g2.services.UsuarioService;
+
+import exceptions.MyEntityNotFoundException;
 
 
 
@@ -163,30 +162,42 @@ public class UsuarioController {
 		return usuarioService.getContar();
 	}
 	
-	@PostMapping("/salvar")
-	public Usuario salvar (@RequestBody Usuario objetoUsuario) {
-		return usuarioService.salvar(objetoUsuario);
-	}
+//	@PostMapping("/salvar")
+//	public Usuario salvar (@RequestBody Usuario objetoUsuario) {
+//		return usuarioService.salvar(objetoUsuario);
+//	}
 	@GetMapping("/listar")
-	public List <Usuario> listar(){
-		return usuarioService.listar();
+	public ResponseEntity<List<UsuarioResponseDTO>> listar(){
+		return ResponseEntity.ok(usuarioService.listar());
 	}
 	
 	@GetMapping("/{id}")
-	public Usuario acharId(@PathVariable Integer id) {
-		return usuarioService.acharId(id);
+	public ResponseEntity<UsuarioResponseDTO> acharId(@PathVariable Integer id) {
+		UsuarioResponseDTO usuarioDTO = usuarioService.acharId(id);
+		if (usuarioDTO == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(usuarioDTO);
 	}
 //	@DeleteMapping("/delete/{id}")
 //	public void apagar(@PathVariable Integer id) {
 //		usuarioService.apagar(id);
 //	}
 	@DeleteMapping("/deletarLogico/{id}")//perguntar......
-	public void deletarLogico(@PathVariable Integer id) {//alterando o apagar para deletarLogico
-		usuarioService.deletarLogico(id);
+	public ResponseEntity<Void> deletarLogico(@PathVariable Integer id) throws MyEntityNotFoundException {//alterando o apagar para deletarLogico
+		boolean deletarLogico = usuarioService.deletarLogico(id);
+		if (deletarLogico) {
+			return ResponseEntity.noContent().build();			
+		} else {
+			return ResponseEntity.notFound().build(); 
+		}
 	}
 	@PutMapping("/atualizar/{id}")
-	public Usuario atualizar(@PathVariable Integer id, @RequestBody Usuario objetoUsuario) { 
-		 return usuarioService.atualizar(id, objetoUsuario);
-	
+	public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Integer id, @RequestBody UsuarioRequestDTO objetoUsuario) throws MyEntityNotFoundException { 
+		UsuarioResponseDTO usuarioDTO = usuarioService.atualizar(id, objetoUsuario);
+		if (usuarioDTO == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(usuarioDTO);
 	}
 }
