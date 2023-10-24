@@ -15,8 +15,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -54,7 +57,11 @@ public class Usuario {
 	@Column(name="email")
 	private String email;
 
-	@Size(max=20)
+	//errorResponse
+	@Size(min = 14, max = 14)
+	@CPF
+	@NotNull(message = "CPF não pode ser nulo")
+	@NotBlank(message = "CPF não pode ser vazio")
 	@Column(name="cpf")
 	private String cpf;
 
