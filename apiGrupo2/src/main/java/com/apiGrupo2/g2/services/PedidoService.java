@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apiGrupo2.g2.dto.PedidoDTO;
 import com.apiGrupo2.g2.dto.PedidoRequestCadastroDTO;
 import com.apiGrupo2.g2.dto.PedidoResponseCadastroDTO;
 import com.apiGrupo2.g2.dto.ProdutoPedidoDTO;
@@ -17,6 +16,7 @@ import com.apiGrupo2.g2.entities.Pedido;
 import com.apiGrupo2.g2.entities.PedidoProduto;
 import com.apiGrupo2.g2.entities.Produto;
 import com.apiGrupo2.g2.entities.Usuario;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.repositories.PedidoRepository;
 import com.apiGrupo2.g2.repositories.ProdutoRepository;
 import com.apiGrupo2.g2.repositories.UsuarioRepository;
@@ -46,7 +46,7 @@ public class PedidoService {
 		// verificando se o usuario existe
 		Usuario usuario = usuarioRepository.findByCpf(pedidoDTO.getCpfUsuario());
 		if (usuario == null) {
-			throw new Exception("Usuario não cadastrado"); // criar exceção
+			throw new MyEntityNotFoundException("Usuario não cadastrado");
 		}
 		
 		Pedido pedido = new Pedido();
@@ -60,7 +60,7 @@ public class PedidoService {
 			// verificando se o produto existe
 			Optional<Produto> produtoOpt = produtoRepository.findById(produtoPedidoDTO.getIdProduto());
 			if (produtoOpt.isEmpty()) {
-				throw new Exception("Produto não cadastrado"); // criar exceção
+				throw new MyEntityNotFoundException("Produto não cadastrado");
 			}
 			Produto produto = produtoOpt.get();
 			
@@ -78,61 +78,48 @@ public class PedidoService {
 		emailService.envioEmailPedido(pedido);
 		
 		PedidoResponseCadastroDTO pedidoResponseCadastroDTO = new PedidoResponseCadastroDTO(pedido);
-		for (PedidoProduto pedidoProduto: pedido.getPedidoProduto()) {
-			ProdutoPedidoResponse produtoPedidoResponse = new ProdutoPedidoResponse();
-			produtoPedidoResponse.setIdProduto(pedidoProduto.getId().getProduto().getId());
-			produtoPedidoResponse.setQuantidade(pedidoProduto.getQuantidadeProduto());
-			produtoPedidoResponse.setValorUnitario(pedidoProduto.getId().getProduto().getValorUnitario());
-			
-			pedidoResponseCadastroDTO.getProdutosPedidosResponse().add(produtoPedidoResponse);
-		}
 		
 		return pedidoResponseCadastroDTO;
 	}
-	public Pedido acharId(Integer id) {
-		return pedidoRepository.findById(id).get();
+	public PedidoResponseCadastroDTO acharId(Integer id) throws MyEntityNotFoundException {
+		Pedido pedido = verificarSePedidoExiste(id);
+		return new PedidoResponseCadastroDTO(pedido);
 	}
-	public List<Pedido> listar(){
-		return pedidoRepository.findAll();
+
+	private Pedido verificarSePedidoExiste(Integer id) {
+		Optional<Pedido> pedidoOpt = pedidoRepository.findById(id);
+		if (pedidoOpt.isEmpty()) {
+			throw new MyEntityNotFoundException("Pedido não cadastrado");
+		}
+		return pedidoOpt.get();
+	}
+	
+	public List<PedidoResponseCadastroDTO> listar(){
+		List<Pedido> pedidos = pedidoRepository.findAll();
+		List<PedidoResponseCadastroDTO> pedidosDTO = new ArrayList<>();
+		for(Pedido pedido: pedidos) {
+			PedidoResponseCadastroDTO pedidoDTO = new PedidoResponseCadastroDTO(pedido);
+			pedidosDTO.add(pedidoDTO);
+		}
+		return pedidosDTO;
 	}
 //	public void apagar(Integer id) {
 //	 pedidoRepository.deleteById(id);
 //}
 	public void deletarLogico(Integer id) {
-		Pedido objPedido = acharId(id);
-		
-		if(acharId(id) != null) {
-			acharId(id).setAtivo(false);
-			pedidoRepository.save(objPedido);
-		}
+		Pedido pedido = verificarSePedidoExiste(id);
+		pedido.setAtivo(false);
+		pedidoRepository.save(pedido);
 	}
-	
-	public Pedido atualizar(Integer id, Pedido objetoPedido) {
-		Pedido registroAntigo = acharId(id);
-		
-		if (objetoPedido.getAtivo()!=null) {
-			registroAntigo.setAtivo(objetoPedido.getAtivo());
+
+	public List<PedidoResponseCadastroDTO> listarPedidosPorUsuario(Integer usuarioId) {
+		List<Pedido> pedidos = pedidoRepository.findByUsuarioId(usuarioId);
+		List<PedidoResponseCadastroDTO> pedidosDTO = new ArrayList<>();
+		for(Pedido pedido: pedidos) {
+			PedidoResponseCadastroDTO pedidoDTO = new PedidoResponseCadastroDTO(pedido);
+			pedidosDTO.add(pedidoDTO);
 		}
-						
-		if (objetoPedido.getDataPedido()!=null) {
-			registroAntigo.setDataPedido(objetoPedido.getDataPedido());
-		}
-		
-		/*
-		if (objetoPedido.getProdutos()!=null) {
-			registroAntigo.setProdutos(objetoPedido.getProdutos());
-		}
-		*/
-		
-		if (objetoPedido.getValorPedido()!=null) {
-			registroAntigo.setValorPedido(objetoPedido.getValorPedido());
-		}
-		
-		if (objetoPedido.getUsuario()!=null) {
-		registroAntigo.setUsuario(objetoPedido.getUsuario());
-		}
-								
-		registroAntigo.setId(id);
-		return pedidoRepository.save(registroAntigo);
+		return pedidosDTO;
 	}
+
 }

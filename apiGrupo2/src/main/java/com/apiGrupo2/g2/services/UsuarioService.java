@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service;
 import com.apiGrupo2.g2.dto.UsuarioRequestDTO;
 import com.apiGrupo2.g2.dto.UsuarioResponseDTO;
 import com.apiGrupo2.g2.entities.Usuario;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.repositories.UsuarioRepository;
-
-import exceptions.MyEntityNotFoundException;
 
 @Service
 public class UsuarioService {

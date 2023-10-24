@@ -12,11 +12,14 @@ public class ProdutoDTO {
 
 	private Double valorUnitario;
 
+	private Integer quantidadeEstoque;
+
 	private Boolean ativo;
 
 	private Integer usuarioId;
-	
-	public ProdutoDTO() {}
+
+	public ProdutoDTO() {
+	}
 
 	public ProdutoDTO(Produto produto) {
 		this.id = produto.getId();
@@ -25,6 +28,7 @@ public class ProdutoDTO {
 		this.valorUnitario = produto.getValorUnitario();
 		this.ativo = produto.getAtivo();
 		this.usuarioId = produto.getUsuario().getId();
+		this.quantidadeEstoque = produto.getQuantidadeEstoque();
 	}
 
 	public Integer getId() {
@@ -73,6 +77,14 @@ public class ProdutoDTO {
 
 	public void setUsuarioId(Integer usuarioId) {
 		this.usuarioId = usuarioId;
+	}
+
+	public Integer getQuantidadeEstoque() {
+		return quantidadeEstoque;
+	}
+
+	public void setQuantidadeEstoque(Integer quantidadeEstoque) {
+		this.quantidadeEstoque = quantidadeEstoque;
 	}
 
 }

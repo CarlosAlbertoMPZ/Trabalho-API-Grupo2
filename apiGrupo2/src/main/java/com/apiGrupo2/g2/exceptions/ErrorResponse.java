@@ -1,4 +1,4 @@
-package exceptions;
+package com.apiGrupo2.g2.exceptions;
 
 import java.util.List;
 

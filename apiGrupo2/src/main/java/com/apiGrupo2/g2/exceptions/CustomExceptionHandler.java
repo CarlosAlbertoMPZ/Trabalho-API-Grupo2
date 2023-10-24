@@ -1,4 +1,4 @@
-package exceptions;
+package com.apiGrupo2.g2.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(MyEntityNotFoundException.class)
 	protected ResponseEntity<Object> handleMyEntityNotFoundException(MyEntityNotFoundException ex) {
+		System.out.println("------" + ex.getMessage() + "-------");
 		return ResponseEntity.notFound().build();
 	}
 

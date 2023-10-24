@@ -15,9 +15,8 @@ import com.apiGrupo2.g2.dto.UsuarioResponseDTO;
 import com.apiGrupo2.g2.entities.Categoria;
 import com.apiGrupo2.g2.entities.Produto;
 import com.apiGrupo2.g2.entities.Usuario;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.repositories.CategoriaRepository;
-
-import exceptions.MyEntityNotFoundException;
 
 
 @Service

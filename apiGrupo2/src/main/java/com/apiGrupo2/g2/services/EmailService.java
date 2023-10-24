@@ -267,6 +267,7 @@ public class EmailService {
 			builder.append("<table border='2' cellpadding>\r\n");
 			builder.append("<tr> <th> Nome</th> <th> </th> <th> Data de entrega</th> </tr>\r\n");
 			
+			/*
 			List<Produto>listaProdutos = produtoService.listar();
 			for(Produto produtos : listaProdutos) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
 				builder.append("		    <tr>\r\n");
@@ -286,6 +287,7 @@ public class EmailService {
 				builder.append(dataEntrega);
 				builder.append("			</td>\r\n");
 			}
+			*/
 			
 			builder.append("		</table>\r\n");
 			builder.append("		</center>\r\n");

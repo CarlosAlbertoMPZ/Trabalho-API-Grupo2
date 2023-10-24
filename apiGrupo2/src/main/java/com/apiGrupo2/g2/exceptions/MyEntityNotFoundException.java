@@ -1,4 +1,4 @@
-package exceptions;
+package com.apiGrupo2.g2.exceptions;
 
 public class MyEntityNotFoundException extends RuntimeException {
 

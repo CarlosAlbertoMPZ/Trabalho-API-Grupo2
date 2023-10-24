@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apiGrupo2.g2.dto.CategoriaRequestCadastroDTO;
 import com.apiGrupo2.g2.dto.CategoriaResponseDTO;
 import com.apiGrupo2.g2.entities.Categoria;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.services.CategoriaService;
 import com.apiGrupo2.g2.services.EmailService;
-
-import exceptions.MyEntityNotFoundException;
 
 @RestController
 @RequestMapping("/categoria")

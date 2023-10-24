@@ -50,12 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	        		.csrf().disable()
 	                .httpBasic().disable()
 	                .authorizeHttpRequests()
-	                .antMatchers("/teste/login", "/teste/count").permitAll()
-	                .antMatchers("/teste/ola").hasRole("USER")
+	                .antMatchers("/contar/salvar", "/contar/listar", "/endereco/salvar","/usuario/salvar", "/usuario/logar").permitAll()
+	                .antMatchers("/endereco/contar","/endereco/listar","/endereco/{id}","endereco/deletarLogico/{id}").hasRole("COMPRADOR")
 	                .antMatchers("/categoria/contar","/categoria/Listar","/categoria/{id}","/categoria/deletarLogico/{id}","/categoria/atualizar/{id}",
 	                		"/produto/contar","/produto/salvar","/produto/listar","/produto/{id}","/produto/deletarLogico/{id}","/produto/atualizar/{id}",
 	                		"/atualizar/{id}").hasRole("VENDEDOR")
-	                .antMatchers("/teste/listar").hasRole("ADMIN")
+	                .antMatchers("endereco/atualizar/{id}", "/pedido/listar","/pedido/{id}","/pedido/deletarLogico/{id}",
+	                		"/pedido/atualizar/{id}","/pedido/salvar", "/pedido/usuario/{usuarioId}").hasAnyRole("VENDEDOR","COMPRADOR")
 	                .and()
 	                .userDetailsService(uds)
 	                .exceptionHandling()

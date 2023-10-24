@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,13 +33,12 @@ import com.apiGrupo2.g2.entities.Endereco;
 import com.apiGrupo2.g2.entities.Role;
 import com.apiGrupo2.g2.entities.Usuario;
 import com.apiGrupo2.g2.enums.TipoRoleEnum;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.repositories.EnderecoRepository;
 import com.apiGrupo2.g2.repositories.RoleRepository;
 import com.apiGrupo2.g2.services.EmailService;
 import com.apiGrupo2.g2.services.EnderecoService;
 import com.apiGrupo2.g2.services.UsuarioService;
-
-import exceptions.MyEntityNotFoundException;
 
 
 
@@ -71,7 +72,7 @@ public class UsuarioController {
 	private PasswordEncoder passwordEncoder;
 	
 	@PostMapping("/registro")
-	public ResponseEntity<MessageResponseDTO> cadastro(@RequestParam String email, @RequestBody UsuarioDTO usuario) {
+	public ResponseEntity<MessageResponseDTO> cadastro(@RequestParam String email, @Valid @RequestBody UsuarioDTO usuario) {
 
 		Set<String> strRoles = usuario.getRoles();
 		Set<Role> roles = new HashSet<>();

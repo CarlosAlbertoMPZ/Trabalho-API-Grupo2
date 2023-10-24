@@ -3,20 +3,18 @@ package com.apiGrupo2.g2.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apiGrupo2.g2.dto.PedidoDTO;
 import com.apiGrupo2.g2.dto.PedidoRequestCadastroDTO;
 import com.apiGrupo2.g2.dto.PedidoResponseCadastroDTO;
-import com.apiGrupo2.g2.entities.Pedido;
-import com.apiGrupo2.g2.services.EmailService;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.services.PedidoService;
 
 @RestController
@@ -32,17 +30,28 @@ public class PedidoController {
 	}
 	
 	@PostMapping("/salvar")
-	public PedidoResponseCadastroDTO salvar (@RequestBody PedidoRequestCadastroDTO objetoPedido) throws Exception {//PedidoDTO
-		return pedidoService.salvar(objetoPedido);
+	public ResponseEntity<PedidoResponseCadastroDTO> salvar (@RequestBody PedidoRequestCadastroDTO objetoPedido) throws Exception {//PedidoDTO
+		PedidoResponseCadastroDTO pedido = pedidoService.salvar(objetoPedido);
+		return ResponseEntity.ok(pedido);
 	}
 	@GetMapping("/listar")
-	public List <Pedido> listar(){
-		return pedidoService.listar();
+	public ResponseEntity<List <PedidoResponseCadastroDTO>> listar(){
+		return ResponseEntity.ok(pedidoService.listar());
 	}
 	
 	@GetMapping("/{id}")
-	public Pedido acharId(@PathVariable Integer id) {
-		return pedidoService.acharId(id);
+	public ResponseEntity<PedidoResponseCadastroDTO> acharId(@PathVariable Integer id) {
+		PedidoResponseCadastroDTO pedidoDTO = pedidoService.acharId(id);
+		if (pedidoDTO == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(pedidoDTO);
+	}
+	
+	@GetMapping("/usuario/{usuarioId}")
+	public ResponseEntity<List<PedidoResponseCadastroDTO>> listarPedidosPorUsuario(@PathVariable Integer usuarioId) {
+		List<PedidoResponseCadastroDTO> pedidosDTO = pedidoService.listarPedidosPorUsuario(usuarioId);
+		return ResponseEntity.ok(pedidosDTO);
 	}
 	
 //	@DeleteMapping("/delete/{id}")
@@ -50,12 +59,8 @@ public class PedidoController {
 //		pedidoService.apagar(id);
 //	}
 	@DeleteMapping("/deletarLogico/{id}")
-	public void deletarLogico(@PathVariable Integer id) {
+	public ResponseEntity<Void> deletarLogico(@PathVariable Integer id)throws MyEntityNotFoundException {
 		pedidoService.deletarLogico(id);
-	}
-	@PutMapping("/atualizar/{id}")
-	public Pedido atualizar(@PathVariable Integer id, @RequestBody Pedido objetoPedido) { 
-		 return pedidoService.atualizar(id, objetoPedido);
-	
+		return ResponseEntity.noContent().build();
 	}
 }
