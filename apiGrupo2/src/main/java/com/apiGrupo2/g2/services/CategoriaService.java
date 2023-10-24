@@ -3,6 +3,7 @@ package com.apiGrupo2.g2.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Service;
 import com.apiGrupo2.g2.dto.CategoriaRequestCadastroDTO;
 import com.apiGrupo2.g2.dto.CategoriaResponseDTO;
 import com.apiGrupo2.g2.dto.ProdutoDTO;
+import com.apiGrupo2.g2.dto.UsuarioResponseDTO;
 import com.apiGrupo2.g2.entities.Categoria;
 import com.apiGrupo2.g2.entities.Produto;
+import com.apiGrupo2.g2.entities.Usuario;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.repositories.CategoriaRepository;
 
 
@@ -49,45 +53,57 @@ public class CategoriaService {
 		return categoriaRespDTO;
 	}
 	
-	public Categoria acharId(Integer id) {
-		return categoriaRepository.findById(id).get();
+	public CategoriaResponseDTO acharId(Integer id) throws MyEntityNotFoundException{
+		Optional<Categoria> categoriaOpt = categoriaRepository.findById(id);
+				if (categoriaOpt.isEmpty()) {
+					return null;
+				}
+				Categoria categoria = categoriaOpt.get();
+				return new CategoriaResponseDTO(categoria);
 	}
 	
-	public List<Categoria> listar(){
-		return categoriaRepository.findAll();
+	public List<CategoriaResponseDTO> listar(){
+		List<Categoria> categorias = categoriaRepository.findAll();
+		List<CategoriaResponseDTO> categoriasDTO = new ArrayList<>();
+		for(Categoria categoria: categorias) {
+			CategoriaResponseDTO categoriaDTO = new CategoriaResponseDTO(categoria);
+			categoriasDTO.add(categoriaDTO);
+		}
+		return categoriasDTO;
 	}
 //	public void apagar(Integer id) {
 //	 pedidoRepository.deleteById(id);
 //}
 	
-	public void deletarLogico(Integer id) {
-		Categoria objCategoria = acharId(id);
-		
-		if(acharId(id) != null) {
-			acharId(id).setAtivo(false);
-			categoriaRepository.save(objCategoria);
+	public boolean deletarLogico(Integer id) {
+		Optional<Categoria> categoriaOpt = categoriaRepository.findById(id);
+		if (categoriaOpt.isPresent()) {
+			Categoria categoria = categoriaOpt.get();
+			categoria.setAtivo(false);
+			categoriaRepository.save(categoria);
+			return true;
+		} else {
+			return false;
 		}
 	}
-	public Categoria atualizar(Integer id, Categoria objetoCategoria) {
-		Categoria registroAntigo = acharId(id);
-		
-		if (objetoCategoria.getAtivo()!=null) {
-			registroAntigo.setAtivo(objetoCategoria.getAtivo());
+	public CategoriaResponseDTO atualizar(Integer id, CategoriaRequestCadastroDTO objetoCategoria) {
+		Optional<Categoria> categoriaOpt = categoriaRepository.findById(id);
+		if (categoriaOpt.isEmpty()) {
+			return null;
 		}
-						
+		
+		Categoria categoriaBD = categoriaOpt.get();
+		
+								
 		if (objetoCategoria.getNome()!=null) {
-			registroAntigo.setNome(objetoCategoria.getNome());
+			categoriaBD.setNome(objetoCategoria.getNome());
 		}
 		
 		if (objetoCategoria.getDescricao()!=null) {
-			registroAntigo.setDescricao(objetoCategoria.getDescricao());
+			categoriaBD.setDescricao(objetoCategoria.getDescricao());
 		}
-		
-		if (objetoCategoria.getProdutos()!=null) {
-			registroAntigo.setProdutos(objetoCategoria.getProdutos());
-		}
-								
-		registroAntigo.setId(id);
-		return categoriaRepository.save(registroAntigo);
+												
+		categoriaBD = categoriaRepository.save(categoriaBD);
+		return new CategoriaResponseDTO(categoriaBD);
 	}
 }

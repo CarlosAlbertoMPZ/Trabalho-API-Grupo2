@@ -1,4 +1,4 @@
-package exceptions;
+package com.apiGrupo2.g2.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 
 		return super.handleExceptionInternal(ex, erro, headers, status, request);
 	}
+	
+	@ExceptionHandler(MyEntityNotFoundException.class)
+	protected ResponseEntity<Object> handleMyEntityNotFoundException(MyEntityNotFoundException ex) {
+		System.out.println("------" + ex.getMessage() + "-------");
+		return ResponseEntity.notFound().build();
+	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
 	protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
@@ -50,7 +56,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-
+	
 //    @ExceptionHandler(Exception.class)
 //    public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 //        List<String> details = new ArrayList<>();

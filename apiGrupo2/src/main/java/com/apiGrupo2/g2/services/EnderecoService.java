@@ -3,6 +3,7 @@ package com.apiGrupo2.g2.services;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,19 +38,26 @@ public class EnderecoService {
 	}
 	
 	public Endereco acharId(Integer id) {
-		return enderecoRepository.findById(id).get();
+		Optional<Endereco> enderecoOpt = enderecoRepository.findById(id);
+		if (enderecoOpt.isEmpty()) {
+			return null;
+		}
+		return enderecoOpt.get();
 	}
 	
 	public List<Endereco> listar(){
 		return enderecoRepository.findAll();
 	}
 	
-	public void deletarLogico(Integer id) {
-		Endereco objEndereco = acharId(id);
-		
-		if(acharId(id) != null) {
-			acharId(id).setAtivo(false);
-			enderecoRepository.save(objEndereco);
+	public boolean deletarLogico(Integer id) {
+		Optional<Endereco> enderecoOpt = enderecoRepository.findById(id);
+		if(enderecoOpt.isPresent()) {
+			Endereco endereco = enderecoOpt.get();
+			endereco.setAtivo(false);
+			enderecoRepository.save(endereco);
+			return true;
+		} else {
+			return false;		
 		}
 	}
 	
@@ -73,43 +81,48 @@ public class EnderecoService {
 		return restTemplate.getForObject(uri, Endereco.class, params);
 	}
 	
-	public Endereco atualizar(Integer id, Endereco objetoEndereco) {
-		Endereco registroAntigo = acharId(id);
+	public Endereco atualizar(Integer id, EnderecoDTO enderecoDTO) {
+		Optional<Endereco> enderecoBDOpt = enderecoRepository.findById(id);
+		if (enderecoBDOpt.isEmpty()) {
+			return null;
+		}
+		
+		Endereco enderecoBD = enderecoBDOpt.get();
 
-		if (objetoEndereco.getAtivo()!=null) {
-			registroAntigo.setAtivo(objetoEndereco.getAtivo());
+		if (enderecoDTO.getCep()!=null) {
+			Endereco enderecoNovo = pesquisarEndereco(enderecoDTO.getCep());
+			enderecoBD.setCep(enderecoNovo.getCep());
+			enderecoBD.setBairro(enderecoNovo.getBairro());
+			enderecoBD.setLocalidade(enderecoNovo.getLocalidade());
+			enderecoBD.setLogradouro(enderecoNovo.getLogradouro());
+			enderecoBD.setUf(enderecoNovo.getUf());
 		}
 		
-		if (objetoEndereco.getCep()!=null) {
-			registroAntigo.setCep(objetoEndereco.getCep());
+		if (enderecoDTO.getComplemento()!=null) {
+			enderecoBD.setComplemento(enderecoDTO.getComplemento());
 		}
 		
-		if (objetoEndereco.getLogradouro()!=null) {
-			registroAntigo.setLogradouro(null);
+		if (enderecoDTO.getNumero()!=null) {
+			enderecoBD.setNumero(enderecoDTO.getNumero());
 		}
 		
-		if (objetoEndereco.getComplemento()!=null) {
-			registroAntigo.setComplemento(objetoEndereco.getComplemento());
+		return enderecoRepository.save(enderecoBD);
+	}
+
+	public List<Endereco> buscarPorUsuarioId(Integer usuarioId) {
+		List<Endereco> enderecos = enderecoRepository.buscarPorUsuarioId(usuarioId);
+		return enderecos;
+	}
+
+	public Endereco atualizarStatus(Integer id, boolean status) {
+		Optional<Endereco> enderecoBDOpt = enderecoRepository.findById(id);
+		if (enderecoBDOpt.isEmpty()) {
+			return null;
 		}
 		
-		if (objetoEndereco.getNumero()!=null) {
-			registroAntigo.setNumero(objetoEndereco.getNumero());
-		}
+		Endereco enderecoBD = enderecoBDOpt.get();
+		enderecoBD.setAtivo(status);
 		
-		if (objetoEndereco.getBairro()!=null) {
-			registroAntigo.setBairro(objetoEndereco.getBairro());
-		}
-		
-		if (objetoEndereco.getUf()!=null) {
-			registroAntigo.setUf(objetoEndereco.getUf());
-		}
-		
-		if (objetoEndereco.getLocalidade()!=null) {
-			registroAntigo.setLocalidade(objetoEndereco.getLocalidade());
-		}
-		
-								
-		registroAntigo.setId(id);
-		return enderecoRepository.save(registroAntigo);
+		return enderecoRepository.save(enderecoBD);
 	}
 }

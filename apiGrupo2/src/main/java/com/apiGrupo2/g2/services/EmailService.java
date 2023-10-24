@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.apiGrupo2.g2.dto.PedidoDTO;
 import com.apiGrupo2.g2.dto.ProdutoRequestCadastroDTO;
 import com.apiGrupo2.g2.dto.UserDTO;
+import com.apiGrupo2.g2.dto.UsuarioResponseDTO;
 import com.apiGrupo2.g2.entities.Pedido;
 import com.apiGrupo2.g2.entities.Produto;
 import com.apiGrupo2.g2.entities.Usuario;
@@ -137,8 +138,8 @@ public class EmailService {
 			builder.append("<table border='2' cellpadding>\r\n");
 			builder.append("<tr> <th> Nome</th> <th> Email</th> <th>Perfis</th><th> Data de entrega</th> </tr>\r\n");
 			
-			List<Usuario>listaUsuarios=usuarioService.listar();
-			for(Usuario usuario : listaUsuarios) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
+			List<UsuarioResponseDTO>listaUsuarios = usuarioService.listar();
+			for(UsuarioResponseDTO usuario : listaUsuarios) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
 				builder.append("		    <tr>\r\n");
 				builder.append("			<td>\r\n");
 				builder.append(usuario.getNomeUsuario());
@@ -266,6 +267,7 @@ public class EmailService {
 			builder.append("<table border='2' cellpadding>\r\n");
 			builder.append("<tr> <th> Nome</th> <th> </th> <th> Data de entrega</th> </tr>\r\n");
 			
+			/*
 			List<Produto>listaProdutos = produtoService.listar();
 			for(Produto produtos : listaProdutos) {//vai percorrer a lista usuario e vai executar oque esta dentro do for
 				builder.append("		    <tr>\r\n");
@@ -285,6 +287,7 @@ public class EmailService {
 				builder.append(dataEntrega);
 				builder.append("			</td>\r\n");
 			}
+			*/
 			
 			builder.append("		</table>\r\n");
 			builder.append("		</center>\r\n");

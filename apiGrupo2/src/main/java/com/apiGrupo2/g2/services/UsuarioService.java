@@ -1,110 +1,106 @@
 package com.apiGrupo2.g2.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apiGrupo2.g2.dto.UsuarioRequestDTO;
+import com.apiGrupo2.g2.dto.UsuarioResponseDTO;
 import com.apiGrupo2.g2.entities.Usuario;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.repositories.UsuarioRepository;
-
-
 
 @Service
 public class UsuarioService {
-	
+
 	@Autowired
 	UsuarioRepository usuarioRepository;
-	
+
 	public Integer getContar() {
 		return usuarioRepository.contar();
 	}
+
 	public Usuario salvar(Usuario objetoUsuario) {
 		return usuarioRepository.save(objetoUsuario);
 	}
-	public Usuario acharId(Integer id) {
-		return usuarioRepository.findById(id).get();
+
+	public UsuarioResponseDTO acharId(Integer id) throws MyEntityNotFoundException {
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		if (usuarioOpt.isEmpty()) {
+			return null;
+		}
+		Usuario usuario = usuarioOpt.get();
+		return new UsuarioResponseDTO(usuario);
 	}
-	public List<Usuario> listar(){
-		return usuarioRepository.findAll();
+
+	public List<UsuarioResponseDTO> listar() {
+		List<Usuario> usuarios = usuarioRepository.findAll();
+		List<UsuarioResponseDTO> usuariosDTO = new ArrayList<>();
+		for (Usuario usuario : usuarios) {
+			UsuarioResponseDTO usuarioDTO = new UsuarioResponseDTO(usuario);
+			usuariosDTO.add(usuarioDTO);
+		}
+		return usuariosDTO;
 	}
+
 //	public void apagar(Integer id) {
 //		 usuarioRepository.deleteById(id);
 //	}
-	public void deletarLogico(Integer id) {
-		Usuario objUsuario = acharId(id);
-		
-		if(acharId(id) != null) {
-			acharId(id).setAtivo(false);
-			usuarioRepository.save(objUsuario);
+	public boolean deletarLogico(Integer id) {
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		if (usuarioOpt.isPresent()) {
+			Usuario usuario = usuarioOpt.get();
+			usuario.setAtivo(false);
+			usuarioRepository.save(usuario);
+			return true;
+		} else {
+			return false;
 		}
+
 	}
-	
-	public Usuario atualizar(Integer id, Usuario objetoUsuario) {
-		Usuario registroAntigo = acharId(id);
-		// perguntar sobre a verificação do id se ele existe ou não
-		if (objetoUsuario.getAtivo()!=null) {
-			registroAntigo.setAtivo(objetoUsuario.getAtivo());
+
+	public UsuarioResponseDTO atualizar(Integer id, UsuarioRequestDTO objetoUsuario) {
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		if (usuarioOpt.isEmpty()) {
+			return null;
 		}
-		
-		if (objetoUsuario.getCelular()!=null) {
-			registroAntigo.setCelular(objetoUsuario.getCelular());
+
+		Usuario usuarioBD = usuarioOpt.get();
+
+		if (objetoUsuario.getCelular() != null) {
+			usuarioBD.setCelular(objetoUsuario.getCelular());
 		}
-		
-		if (objetoUsuario.getTelefone()!=null) {
-			registroAntigo.setTelefone(objetoUsuario.getTelefone());
+
+		if (objetoUsuario.getTelefone() != null) {
+			usuarioBD.setTelefone(objetoUsuario.getTelefone());
 		}
-		
-		if (objetoUsuario.getNome()!=null) {
-			registroAntigo.setNome(objetoUsuario.getNome());
+
+		if (objetoUsuario.getNome() != null) {
+			usuarioBD.setNome(objetoUsuario.getNome());
 		}
-		
-		if (objetoUsuario.getNomeUsuario()!=null) {
-			registroAntigo.setNomeUsuario(objetoUsuario.getNomeUsuario());
+
+		if (objetoUsuario.getNomeUsuario() != null) {
+			usuarioBD.setNomeUsuario(objetoUsuario.getNomeUsuario());
 		}
-		
-		if (objetoUsuario.getEmail()!=null) {
-			registroAntigo.setEmail(objetoUsuario.getEmail());
+
+		if (objetoUsuario.getEmail() != null) {
+			usuarioBD.setEmail(objetoUsuario.getEmail());
 		}
-		
-		if (objetoUsuario.getCpf()!=null) {
-			registroAntigo.setCpf(objetoUsuario.getCpf());
+
+		if (objetoUsuario.getPassword() != null) {
+			usuarioBD.setPassword(objetoUsuario.getPassword());
 		}
-		
-		if (objetoUsuario.getDataNascimento()!=null) {
-			registroAntigo.setDataNascimento(objetoUsuario.getDataNascimento());
-		}
-		
-		if (objetoUsuario.getPassword()!=null) {
-			registroAntigo.setPassword(objetoUsuario.getPassword());
-		}
-		
-//		if (objetoUsuario.getRoles()!=null) {
-//			registroAntigo.setRoles(objetoUsuario.getRoles());
-//		}
-		
-		if (objetoUsuario.getEnderecos()!=null) {
-			registroAntigo.setEnderecos(objetoUsuario.getEnderecos());
-		}
-		
-		
-		if (objetoUsuario.getPedidos()!=null) {
-			registroAntigo.setPedidos(objetoUsuario.getPedidos());
-		}
-		
-		if (objetoUsuario.getProdutos()!=null) {
-			registroAntigo.setProdutos(objetoUsuario.getProdutos());
-		}
-		
-		if (objetoUsuario.getRoles()!=null) {
-			registroAntigo.setRoles(objetoUsuario.getRoles());
-		}
-				
-		registroAntigo.setId(id);
-		return usuarioRepository.save(registroAntigo);
+
+		usuarioBD = usuarioRepository.save(usuarioBD);
+
+		return new UsuarioResponseDTO(usuarioBD);
 	}
-	public Usuario findByEmail(String email){
-      return usuarioRepository.findByEmail(email).get();
-  }
-	
+
+	public Usuario findByEmail(String email) {
+		return usuarioRepository.findByEmail(email).get();
+	}
+
 }

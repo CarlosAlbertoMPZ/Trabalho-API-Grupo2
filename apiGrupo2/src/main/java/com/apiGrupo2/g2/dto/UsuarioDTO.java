@@ -3,15 +3,21 @@ package com.apiGrupo2.g2.dto;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+
+import org.hibernate.validator.constraints.br.CPF;
+
 public class UsuarioDTO {
 
 	private String nomeUsuario;
+	@Email
 	private String email;
 	private Set<String> roles;
 	private String password;
 	private String nome;
 	private String telefone;
 	private String celular;
+	@CPF
 	private String cpf;
 	private LocalDate dataNascimento;
 	private String cep;

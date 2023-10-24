@@ -3,6 +3,7 @@ package com.apiGrupo2.g2.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apiGrupo2.g2.dto.ProdutoDTO;
+import com.apiGrupo2.g2.dto.ProdutoRequestAtualizarDTO;
 import com.apiGrupo2.g2.dto.ProdutoRequestCadastroDTO;
 import com.apiGrupo2.g2.dto.ProdutoResponseDTO;
-import com.apiGrupo2.g2.entities.Produto;
-import com.apiGrupo2.g2.services.EmailService;
+import com.apiGrupo2.g2.exceptions.MyEntityNotFoundException;
 import com.apiGrupo2.g2.services.ProdutoService;
 
 
@@ -23,12 +25,6 @@ import com.apiGrupo2.g2.services.ProdutoService;
 @RequestMapping("/produto")
 public class ProdutoController {
 	
-	private EmailService emailService;
-    @Autowired
-    public void setEmailService(EmailService emailService) {
-        this.emailService = emailService;
-    }
-
 	@Autowired
 	ProdutoService produtoService;
 	
@@ -38,19 +34,23 @@ public class ProdutoController {
 	}
 	
 	@PostMapping("/salvar")
-	public ProdutoResponseDTO salvar (@RequestBody ProdutoRequestCadastroDTO pdtReqDTO) {
-		emailService.envioEmailProduto(pdtReqDTO);
-		return produtoService.salvar(pdtReqDTO);
+	public ResponseEntity<ProdutoResponseDTO> salvar (@RequestBody ProdutoRequestCadastroDTO pdtReqDTO) throws MyEntityNotFoundException {
+		return ResponseEntity.ok(produtoService.salvar(pdtReqDTO));
 	}
 	
 	@GetMapping("/listar")
-	public List <Produto> listar(){
-		return produtoService.listar();
+	public ResponseEntity<List<ProdutoDTO>> listar(){
+		return ResponseEntity.ok(produtoService.listar());
 	}
 	
 	@GetMapping("/{id}")
-	public Produto acharId(@PathVariable Integer id) {
-		return produtoService.acharId(id);
+	public ResponseEntity<ProdutoDTO> acharId(@PathVariable Integer id) throws MyEntityNotFoundException {
+		return ResponseEntity.ok(produtoService.acharId(id));
+	}
+	
+	@GetMapping("/usuario/{usuarioId}")
+	public ResponseEntity<List<ProdutoDTO>> listarProdutosPorUsuario(@PathVariable Integer usuarioId) throws MyEntityNotFoundException {
+		return ResponseEntity.ok(produtoService.listarProdutosPorUsuario(usuarioId));
 	}
 	
 //	@DeleteMapping("/delete/{id}")
@@ -59,13 +59,14 @@ public class ProdutoController {
 //	}
 	
 	@DeleteMapping("/deletarLogico/{id}")
-	public void deletarLogico(@PathVariable Integer id) {
+	public ResponseEntity<Void> deletarLogico(@PathVariable Integer id) throws MyEntityNotFoundException {
 		produtoService.deletarLogico(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/atualizar/{id}")
-	public Produto atualizar(@PathVariable Integer id, @RequestBody Produto objetoProduto) { 
-		 return produtoService.atualizar(id, objetoProduto);
+	public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Integer id, @RequestBody ProdutoRequestAtualizarDTO objetoProduto) throws MyEntityNotFoundException { 
+		 return ResponseEntity.ok(produtoService.atualizar(id, objetoProduto));
 	
 	}
 }
