@@ -13,3 +13,13 @@ README
 -Ferramentas utilizadas: JAVA11, STS4, DBEAVER, SWAGGER, CORS, JWT, VIACEP API, JAVAMAIL, IMSOMNIA.
 
 -Segue nossos autores: Carlos Alberto Moreira da Paz, Hevelise Dias, Lucas de Mello Seljan, João Pedro Alves Ribeiro, Rayane Barbosa Lima.
+
+- GuitHub Integrantes:
+
+- https://github.com/Hevelise-Liz,
+- https://github.com/jottatec,
+- https://github.com/Lucas-Seljan,
+- https://github.com/Thomasten22,
+- https://github.com/rayanebarbosapet,
+
+
